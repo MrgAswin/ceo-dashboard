@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Company overview · MRG Gateway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:#0a1222;overflow:hidden}
+a{color:#7cb4ff;text-decoration:none}a:hover{color:#bcd7ff}
+button{font:inherit}
+:focus-visible{outline:2px solid #7cb4ff;outline-offset:2px}
+.nav a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:14px;font-weight:500;color:#dbe6f7;margin-bottom:2px}
+.nav a:hover{background:rgba(255,255,255,.05);color:#fff}
+.nav a.on{background:rgba(255,255,255,.08);color:#fff;font-weight:600}
+.navsec{font:700 10.5px 'Inter',sans-serif;letter-spacing:.14em;color:#8ea2c6;text-transform:uppercase;padding:16px 8px 8px}
+
+/* shell: sidebar and header stay put; only the body scrolls */
+.shell{display:flex;flex-wrap:nowrap;align-items:stretch;height:100vh;height:100dvh;overflow:hidden}
+.side{flex:0 0 268px;width:268px;height:100vh;height:100dvh;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#2a3a5c transparent}
+.side::-webkit-scrollbar{width:8px}
+.side::-webkit-scrollbar-thumb{background:#2a3a5c;border-radius:8px}
+.col{flex:1 1 auto;width:calc(100% - 268px);height:100vh;height:100dvh;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.topbar{flex:0 0 auto;position:sticky;top:0;z-index:20}
+.scroller{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#2a3a5c transparent}
+.scroller::-webkit-scrollbar{width:10px}
+.scroller::-webkit-scrollbar-thumb{background:#2a3a5c;border-radius:10px;border:3px solid #0a1222}
+.vers{display:inline-flex;flex:none;align-items:center;gap:2px;padding:3px;border-radius:999px;background:#0c1427;border:1px solid #1c2842}
+.vers a{display:inline-flex;align-items:center;min-height:32px;padding:0 12px;border-radius:999px;font:600 12px 'Inter',sans-serif;letter-spacing:.04em;color:#a3b1c6}
+.vers a:hover{color:#fff}
+.vers a[aria-current="page"]{background:#2563eb;color:#fff}
+
+/* bento language */
+.bento{display:grid;gap:10px;padding:10px;border-radius:30px;background:#0d1629;border:1px solid #18233b}
+.bc{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:18px;padding:22px;min-width:0;
+  background:#111a2e;border:1px solid #1c2842;border-radius:22px;box-shadow:0 1px 0 rgba(255,255,255,.035) inset;color:#e6edf7}
+a.bc{transition:border-color .15s,background .15s}
+a.bc:hover{background:#132039;color:#e6edf7}
+.inner{background:#0c1427;border-radius:16px}
+/* accent card: solid blue with concentric arc lines (after the reference card) */
+.arcs{overflow:hidden;border-color:#2563eb!important;
+  background:
+    repeating-radial-gradient(circle at 100% 100%, transparent 0 90px, rgba(255,255,255,.12) 90px 91px),
+    #2563eb!important;
+  box-shadow:none!important}
+.arcs .pill:hover{background:#e6edf7!important;color:#0b1a38}
+/* greeting: frosted card. Content stops at the divider along the bottom edge. */
+.hello{position:relative;z-index:1;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;min-width:0;padding:0;border:1px solid rgba(255,255,255,.72);border-radius:28px;color:#0b1a38;
+  background:rgba(255,255,255,.5);
+  -webkit-backdrop-filter:blur(28px) saturate(1.8);
+  backdrop-filter:blur(28px) saturate(1.8);
+  box-shadow:0 22px 44px -28px rgba(2,6,23,.72),inset 0 1px 0 rgba(255,255,255,.8)}
+.hello::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:repeating-radial-gradient(
+    circle at 118% 108%,
+    transparent 0 52px,
+    rgba(96,165,250,.22) 60px,
+    rgba(29,78,216,.5) 64px,
+    rgba(191,219,254,.34) 70px,
+    transparent 78px);
+  -webkit-mask-image:linear-gradient(to top left,#000 0% 22%,rgba(0,0,0,.6) 48%,transparent 70%);
+  mask-image:linear-gradient(to top left,#000 0% 22%,rgba(0,0,0,.6) 48%,transparent 70%)}
+.hello-body{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;gap:14px;flex:1;padding:22px 20px 14px}
+.hello-mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:#1d4ed8;color:#fff;font:700 13px 'Plus Jakarta Sans',sans-serif;letter-spacing:.04em;box-shadow:0 12px 24px -14px rgba(29,78,216,.9)}
+.hello-title{margin:2px 0 0;font:800 30px/1.02 'Plus Jakarta Sans',sans-serif;color:#0b1a38;letter-spacing:-.04em}
+.hello-foot{margin-top:auto;align-self:flex-end;display:flex;flex-direction:column;align-items:flex-end;gap:10px;max-width:100%;text-align:right}
+.hello-copy{margin:0;font-size:14px;line-height:1.45;color:#475569}
+.hello-copy b{color:#0b1a38;font-weight:700}
+.hello-chip{background:rgba(245,158,11,.16);color:#b45309}
+.hello-chip i{width:6px;height:6px;border-radius:50%;background:#d97706}
+.hello-bar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 8px 10px;padding:12px 12px 4px;border-top:1px solid rgba(15,23,42,.28)}
+.hello .hello-queue{background:#0b1a38;border-color:#0b1a38;color:#fff}
+.hello .hello-queue:hover{background:#1d4ed8;color:#fff}
+.hello-refresh{width:44px;height:44px;border-radius:999px;border:1px solid rgba(15,23,42,.12);background:#fff;color:#0b1a38;display:grid;place-items:center;cursor:pointer}
+.hello-refresh:hover{color:#1d4ed8}
+/* operating health: soft blue light across the top, like a diffused lamp */
+.prem{overflow:hidden}
+.prem::before{content:"";position:absolute;left:0;right:0;top:0;height:58%;pointer-events:none;
+  background:linear-gradient(180deg,#3b82f6 0%,#2563eb 26%,#1e3a8a 58%,transparent 100%)}
+.prem::after{content:"";position:absolute;left:0;right:0;top:-18%;height:52%;pointer-events:none;
+  background:radial-gradient(ellipse 72% 70% at 50% 18%,rgba(255,255,255,.55) 0%,rgba(191,219,254,.22) 32%,transparent 68%);
+  filter:blur(12px)}
+.prem>*{position:relative;z-index:1}
+a.bc.prem:hover{background:#111a2e}
+.health-fig{display:flex;align-items:flex-end;gap:6px}
+.health-out{font:700 22px 'Plus Jakarta Sans',sans-serif;color:#8b9ab0;margin-bottom:6px}
+.health-rest{display:flex;flex-direction:column;gap:12px}
+.health .mrg-tick__meter{margin:0}
+.health-foot{align-self:flex-end;display:flex;flex-direction:column;align-items:flex-end;gap:8px;text-align:right}
+.health-foot .cc{margin:0;font-size:14px}
+.health-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 -2px;padding-top:12px;border-top:1px solid rgba(148,197,255,.22)}
+.health-go{width:44px;height:44px;border-radius:999px;border:1px solid rgba(148,197,255,.2);background:rgba(255,255,255,.08);color:#fff;display:grid;place-items:center;flex:none}
+.h2{margin:0;font:700 22px 'Plus Jakarta Sans','Inter',sans-serif;color:#f5f8fc;letter-spacing:-.02em}
+.h2s{margin:4px 0 0;font-size:13.5px;color:#94a3b8}
+.cl{display:block;font:600 16px 'Plus Jakarta Sans','Inter',sans-serif;color:#f5f8fc;letter-spacing:-.01em}
+.cc{display:block;margin-top:4px;font-size:13px;line-height:1.45;color:#94a3b8}
+.fig{display:block;font:800 46px/0.95 'Plus Jakarta Sans','Inter',sans-serif;color:#f5f8fc;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.huge{display:block;font:800 104px/0.88 'Plus Jakarta Sans','Inter',sans-serif;color:#f5f8fc;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.go{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:600;color:#7cb4ff;white-space:nowrap}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.tile{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;flex:none}
+.pill{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px;border-radius:999px;background:#0c1427;border:1px solid #1c2842;color:#e6edf7;font-size:13px;font-weight:600;white-space:nowrap}
+.pill:hover{color:#fff}
+.tab{border:0;background:none;border-radius:999px;padding:0 14px;min-height:36px;cursor:pointer;font:600 12.5px 'Inter',sans-serif;color:#a3b1c6;display:flex;gap:7px;align-items:center;white-space:nowrap}
+.tab:hover{color:#f5f8fc}
+.tab .n{font-size:12px;color:#8b9ab0}
+.tab[aria-pressed="true"]{background:#2563eb;color:#fff}
+.tab[aria-pressed="true"] .n{color:rgba(255,255,255,.8)}
+.tk{display:inline-flex;white-space:nowrap;animation:tk 50s linear infinite}
+@keyframes tk{to{transform:translateX(-50%)}}
+.live{width:7px;height:7px;border-radius:50%;background:#22d3ee;flex:none;animation:pulse 1.8s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,211,238,.6)}80%,100%{box-shadow:0 0 0 7px rgba(34,211,238,0)}}
+.shead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px;padding:0 6px}
+.badge{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;font-size:11.5px;font-weight:700;color:#0a1222}
+.seg{min-width:2px;transition:flex-grow .4s ease}
+.meter{display:block;height:100%;border-radius:3px;transition:width .4s ease}
+
+/* Tick meter — upright ticks filling to --value (0–100), set on the stage card.
+   --value and --tick-on stay on the card so they inherit; declaring them here would zero the reading. */
+.stage{--value:0;--tick-on:#3b82f6}
+.mrg-tick__meter{
+  --ticks:40;
+  --tick-gap:4px;
+  --tick-off:rgba(148,197,255,.16);
+  position:relative;
+  z-index:1;
+  height:34px;
+  margin:14px 0 10px;
+}
+.mrg-tick__meter::before,
+.mrg-tick__meter::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-repeat:repeat-x;
+  background-position:left bottom;
+  background-image:
+    linear-gradient(90deg,var(--c) 0 calc(20% - var(--tick-gap)),transparent 0),
+    linear-gradient(90deg,var(--c) 0 calc(100% - var(--tick-gap)),transparent 0);
+  background-size:
+    calc(500% / var(--ticks)) 100%,
+    calc(100% / var(--ticks)) 72%;
+  border-radius:2px;
+}
+.mrg-tick__meter::before{--c:var(--tick-off)}
+.mrg-tick__meter::after{
+  --c:var(--tick-on);
+  clip-path:inset(0 calc(100% - var(--value) * 1%) 0 0);
+}
+.mrg-tick__meter.is-fill::after{animation:mrg-tick-fill .9s cubic-bezier(.2,.7,.2,1) both}
+@keyframes mrg-tick-fill{from{clip-path:inset(0 100% 0 0)}}
+/* stage cards: copy stays in the plain top. A divider splits it from the bottom band.
+   The grain fades upward and dies out before it reaches the divider. */
+.stage{overflow:hidden;isolation:isolate;padding:0;gap:0;justify-content:flex-start}
+.stage-body{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:flex-start;min-height:108px;padding:20px 36px 18px 18px}
+.stage-pct{display:block;margin-top:6px;font-size:12px;line-height:1.35;color:#94a3b8}
+.stage .fig{margin-top:12px}
+.stage-foot{position:relative;z-index:1;flex:none;height:52px;display:flex;align-items:center;padding:0 18px;border-top:1px solid rgba(148,197,255,.22);border-radius:0 0 21px 21px;isolation:isolate}
+.stage-foot .fig{position:relative;z-index:1;margin:0;font-size:22px;line-height:1.2;color:rgba(255,255,255,.72)}
+.stage-foot::before,
+.stage-foot::after{content:"";position:absolute;inset:0;pointer-events:none;
+  -webkit-mask-image:linear-gradient(to top,#000 0% 55%,transparent 100%);
+  mask-image:linear-gradient(to top,#000 0% 55%,transparent 100%)}
+.stage-foot::before{background:linear-gradient(to top,color-mix(in srgb,var(--tick-on) 64%,transparent),color-mix(in srgb,var(--tick-on) 18%,transparent) 55%,transparent 72%)}
+.stage-foot::after{opacity:.6;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.stage .cl{font-size:22px;line-height:1.2;letter-spacing:-.02em}
+.stage-go{position:absolute;top:20px;right:16px;z-index:2;transform-box:fill-box;transform-origin:center;transition:transform .2s cubic-bezier(.2,.7,.2,1)}
+a.bc.stage:hover .stage-go{transform:scale(1.45)}
+
+/* panel grids */
+.b1{position:relative;isolation:isolate;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:"welcome active active health" "welcome witha closed health" "cust manu auth attn"}
+.b1::before{content:"";position:absolute;z-index:-1;left:6px;top:6px;width:320px;height:430px;pointer-events:none;border-radius:32px;
+  background:
+    radial-gradient(circle at 22% 12%, rgba(255,255,255,.7), transparent 46%),
+    radial-gradient(circle at 78% 86%, rgba(96,165,250,.95), transparent 52%),
+    radial-gradient(circle at 40% 62%, rgba(129,140,248,.75), transparent 48%);
+  filter:blur(16px)}
+.b2{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:"chead chead chead chead" "s1 s2 s3 s4"}
+.b3{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:"inv qr qr comp" "inv over stale comp" "lic lic ghad comp"}
+.b4{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:"briefs briefs rhead rhead" "briefs briefs r1 r2" "briefs briefs r3 r4"}
+
+@media (max-width:1240px){
+  .b1{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"welcome health" "active active" "witha closed" "cust manu" "auth attn"}
+  .b1::before{width:54%;height:300px}
+  .b2{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"chead chead" "s1 s2" "s3 s4"}
+  .b3{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"inv qr" "inv over" "stale lic" "ghad ghad" "comp comp"}
+  .b4{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"briefs briefs" "rhead rhead" "r1 r2" "r3 r4"}
+  .oneline{flex-wrap:wrap!important}
+  .tabs{flex:1 1 100%!important;flex-wrap:wrap!important;max-width:100%}
+  .huge{font-size:84px}
+}
+@media (max-width:980px){.search{display:none!important}.vers{margin-left:auto}}
+@media (max-width:900px){.who{padding-right:4px!important}.who-name,.who-role{display:none}}
+@media (max-width:860px){
+  .side{flex-basis:72px;width:72px;padding-left:8px!important;padding-right:8px!important}
+  .side>div:first-child{justify-content:center;padding-left:0;padding-right:0}
+  .side .navsec{display:none}
+  .side>div:first-child>div:last-child{display:none}
+  .side .nav a{font-size:0;justify-content:center;gap:0;padding-left:0;padding-right:0}
+  .side button{font-size:0!important;gap:0}
+  .topbar{flex-wrap:wrap!important;row-gap:8px}
+  .vers{order:5;flex:1 1 100%;margin-left:0!important;min-width:0;overflow-x:auto}
+}
+@media (max-width:700px){
+  .b1{grid-template-columns:minmax(0,1fr);grid-template-areas:"welcome" "health" "active" "witha" "closed" "cust" "manu" "auth" "attn"}
+  .b2{grid-template-columns:minmax(0,1fr);grid-template-areas:"chead" "s1" "s2" "s3" "s4"}
+  .b3{grid-template-columns:minmax(0,1fr);grid-template-areas:"inv" "qr" "over" "stale" "lic" "ghad" "comp"}
+  .b4{grid-template-columns:minmax(0,1fr);grid-template-areas:"briefs" "rhead" "r1" "r2" "r3" "r4"}
+  .huge,.bc .huge{font-size:60px!important}
+  .health-out{font-size:16px;margin-bottom:4px}
+  .fig{font-size:36px}
+  .hello-title{font-size:26px}
+  .bc{padding:16px;gap:14px}
+  .bento{padding:8px;border-radius:20px}
+  .hello-bar,.health-bar{flex-wrap:wrap}
+  .split2{grid-template-columns:1fr!important}
+  .topbar{padding:10px 12px!important}
+  .vers a{padding:0 8px;min-height:28px}
+  .tabs{flex-wrap:wrap!important}
+}
+@media (prefers-reduced-motion:reduce){.tk,.live{animation:none}.seg,.meter,.stage-go{transition:none}.mrg-tick__meter.is-fill::after{animation:none}a.bc.stage:hover .stage-go{transform:none}}
+
+/* caseload block */
+.cload{--ground:#0a1020;--panel:#111a2e;--raised:#16213a;--raised-hover:#1b2844;--well:#0c1426;--ink:#eef2f9;--ink-2:#a9b4c8;--ink-3:#7b879e;--action:#2f6bf0;--focus:#8fb6ff;--s-prep:#22d3ee;--s-sub:#60a5fa;--s-query:#fbbf24;--s-appr:#34d399;background:var(--panel);border-radius:24px;padding:12px}
+.cload .summary{background:var(--raised);border-radius:16px;padding:24px 28px 22px}
+.cload .head{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.cload h2{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:26px;line-height:1.15;letter-spacing:-.02em;color:var(--ink)}
+.cload h2 .cat{color:var(--ink-2);font-weight:600}
+.cload .tabs{display:flex;flex-wrap:nowrap!important;gap:2px;background:var(--well);border-radius:999px;padding:4px;flex:none;max-width:none}
+.cload .tab{appearance:none;border:0;background:transparent;color:var(--ink-2);font:500 14px/20px 'Inter',sans-serif;min-height:0;padding:8px 16px;border-radius:999px;cursor:pointer;white-space:nowrap;display:flex;gap:8px;align-items:baseline}
+.cload .tab .n{font-variant-numeric:tabular-nums;color:var(--ink-3);font-size:13px}
+.cload .tab:hover{color:var(--ink);background:#141e34}
+.cload .tab[aria-selected="true"]{background:var(--action);color:#fff}
+.cload .tab[aria-selected="true"] .n{color:#d6e2ff}
+.cload .tab:focus-visible,.cload .seg:focus-visible,.cload .card:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.cload .dist{margin-top:22px}
+.cload .bar{display:flex;gap:4px;height:12px}
+.cload .seg{border-radius:4px;min-width:6px;position:relative;cursor:pointer;transition:flex-grow .5s cubic-bezier(.2,.7,.2,1),opacity .15s}
+.cload .bar.dim .seg:not(.on){opacity:.28}
+.cload .seg .tip{position:absolute;bottom:calc(100% + 10px);left:50%;transform:translate(-50%,4px);background:#24314f;color:var(--ink);font:500 12px/16px 'Inter',sans-serif;white-space:nowrap;padding:6px 10px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .12s,transform .12s;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:2}
+.cload .seg.on .tip{opacity:1;transform:translate(-50%,0)}
+.cload .cap{margin:14px 0 0;color:var(--ink-2);font-size:14px;line-height:20px}
+.cload .cap b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.cload .cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:12px}
+.cload .card{--c:var(--s-prep);display:flex;flex-direction:column;min-width:0;background:var(--raised);border-radius:16px;padding:22px 24px 24px;color:var(--ink);text-decoration:none;position:relative;transition:background .15s,transform .15s}
+.cload .card:hover,.cload .card.on{background:var(--raised-hover);color:var(--ink)}
+.cload .card:active{transform:translateY(1px)}
+.cload .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.cload .label{display:flex;align-items:flex-start;gap:10px;min-width:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:16px;line-height:22px}
+.cload .dot{width:10px;height:10px;margin-top:6px;border-radius:3px;background:var(--c);flex:none}
+.cload .go{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:var(--ink-3);background:var(--well);flex:none;font-size:0;transition:color .15s,background .15s}
+.cload .card:hover .go,.cload .card:focus-visible .go{color:var(--ink);background:var(--action)}
+.cload .note{color:var(--ink-3);font-size:13px;line-height:18px;margin:2px 0 0 20px;min-height:18px}
+.cload .count{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:800;font-size:56px;line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums;margin-top:auto;padding-top:28px;color:var(--ink)}
+.cload .meter{margin-top:18px;display:flex;align-items:center;gap:12px}
+.cload .track{flex:1;height:6px;border-radius:3px;background:var(--well);overflow:hidden}
+.cload .fill{display:block;height:100%;width:0;background:var(--c);border-radius:3px;transition:width .5s cubic-bezier(.2,.7,.2,1)}
+.cload .pct{font-size:14px;font-weight:600;color:var(--ink-2);font-variant-numeric:tabular-nums;min-width:40px;text-align:right}
+.cload .card.prep{--c:var(--s-prep)}.cload .card.sub{--c:var(--s-sub)}.cload .card.query{--c:var(--s-query)}.cload .card.appr{--c:var(--s-appr)}
+.dcard{--c:var(--s-prep);display:flex;flex-direction:column;min-width:0;overflow:hidden;background:var(--raised);border-radius:16px;color:var(--ink);text-decoration:none;transition:background .15s}
+.dcard:hover,.dcard.on{background:var(--raised-hover);color:var(--ink)}
+.dcard__top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:20px 20px 0}
+.dcard__title{margin:0;min-width:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:16px;line-height:1.3;color:var(--ink)}
+.dcard__go{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:var(--ink-3);background:var(--well);flex:none}
+.dcard:hover .dcard__go,.dcard:focus-visible .dcard__go{color:var(--ink);background:var(--action)}
+.dcard__note{margin:6px 20px 0;color:var(--ink-3);font-size:13px;line-height:1.35}
+.dcard__count{margin:16px 20px 0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:800;font-size:48px;line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:var(--ink)}
+.dcard .stage-rule{display:block;width:calc(var(--share,0) * 1%);max-width:calc(100% - 40px);height:1px;margin:14px 20px;background:rgba(230,237,247,.42);transition:width .45s cubic-bezier(.2,.7,.2,1)}
+.dcard__cap{margin:0;padding:0 20px 18px;font-size:13px;line-height:1.4;color:var(--ink-2)}
+.dcard__cap strong{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.dcard.prep{--c:var(--s-prep)}.dcard.sub{--c:var(--s-sub)}.dcard.query{--c:var(--s-query)}.dcard.appr{--c:var(--s-appr)}
+@media (max-width:1100px){.cload .cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:980px){
+  .cload .head{align-items:flex-start}
+  .cload .tabs{flex-wrap:wrap!important;width:100%;max-width:100%}
+}
+@media (max-width:700px){
+  .cload .summary{padding:16px}
+  .cload h2{font-size:22px}
+  .cload h2 .cat{display:block}
+  .cload .tabs{width:100%;display:grid!important;grid-template-columns:1fr 1fr;border-radius:14px;flex-wrap:wrap!important}
+  .cload .tab{padding:8px 10px;border-radius:10px;justify-content:space-between;font-size:13px;white-space:normal;min-width:0}
+  .cload .cards{grid-template-columns:1fr 1fr;gap:8px}
+  .cload .card{padding:16px}
+  .cload .count{font-size:40px;padding-top:16px}
+  .cload .label{font-size:15px}
+  .pcard{padding:16px}
+  .pcard__count{font-size:44px}
+  .dcard__count{font-size:36px}
+  .dcard__top{padding-left:16px;padding-right:16px}
+  .dcard__note,.dcard .stage-rule{margin-left:16px;margin-right:16px}
+  .dcard .stage-rule{max-width:calc(100% - 32px)}
+  .dcard__cap{padding:0 16px 14px}
+}
+@media (prefers-reduced-motion:reduce){.cload *{transition:none!important}}
+
+/* tick card — same chrome as the rest of this version */
+.pcard{--c:#22d3ee;display:flex;flex-direction:column;width:100%;min-width:0;min-height:0;padding:22px;border-radius:22px;border:1px solid #1c2842;background:#111a2e;box-shadow:0 1px 0 rgba(255,255,255,.035) inset;color:#e6edf7;text-decoration:none;font-family:'Inter',system-ui,sans-serif;transition:background .15s,border-color .15s}
+.pcard:hover,.pcard:focus-visible,.pcard.on{background:#132039;border-color:#2a3c62;color:#e6edf7}
+.pcard:focus-visible{outline:2px solid #7cb4ff;outline-offset:2px}
+.pcard__head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.pcard__title{margin:0;min-width:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:18px;font-weight:600;line-height:1.25;letter-spacing:-.02em;color:#f5f8fc}
+.pcard__go{flex:none;width:36px;height:36px;display:grid;place-items:center;border-radius:50%;border:1px solid #1c2842;background:#0c1427;color:#94a3b8;transition:background .15s,color .15s,border-color .15s}
+.pcard__go svg{transition:transform .18s ease}
+.pcard:hover .pcard__go,.pcard:focus-visible .pcard__go,.pcard.on .pcard__go{background:#2563eb;border-color:#2563eb;color:#fff}
+.pcard:hover .pcard__go svg,.pcard:focus-visible .pcard__go svg,.pcard.on .pcard__go svg{transform:translate(2px,-2px)}
+.pcard__spacer{flex:1 1 auto;min-height:18px}
+.pcard__metric{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 10px}
+.pcard__count{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:64px;line-height:.9;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#f5f8fc}
+.pcard__of{font-size:13px;line-height:1.35;color:#94a3b8}
+.pcard .ticks{display:flex;align-items:flex-end;gap:3px;height:28px;margin-top:16px}
+.pcard .tick{flex:1 1 0;min-width:0;height:14px;border-radius:2px;background:rgba(148,197,255,.16)}
+.pcard .tick.on{height:28px;background:var(--c)}
+.pcard__caption{margin:12px 0 0;font-size:13px;line-height:1.4;color:#94a3b8}
+.pcard__caption strong{font-weight:700;color:#f5f8fc;font-variant-numeric:tabular-nums}
+.pcard.prep{--c:#22d3ee}.pcard.sub{--c:#60a5fa}.pcard.query{--c:#fbbf24}.pcard.appr{--c:#34d399}
+.prepshow .pcard{max-width:420px;min-height:276px}
+.cload-b .pcard{height:100%}
+.cload-b .cards{align-items:stretch}
+@media (prefers-reduced-motion:reduce){
+  .pcard,.pcard__go,.pcard__go svg{transition:none}
+  .pcard:hover .pcard__go svg,.pcard:focus-visible .pcard__go svg{transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="shell" style="background: #0a1222; font-family: 'Inter', system-ui, sans-serif; color: #e6edf7;">
+
+  <!-- ═════════ SIDEBAR ═════════ -->
+  <aside class="side" aria-label="Main navigation" style="padding: 18px 16px 20px; display: flex; flex-direction: column; background: linear-gradient(180deg, #0a1530 0%, #0b234d 52%, #0d3473 100%); border-right: 1px solid rgba(148,197,255,.08);">
+    <div style="display: flex; gap: 12px; align-items: center; padding: 4px 8px 14px;">
+      <div style="width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(145deg, #1f3b70, #0b1a38); border: 1px solid rgba(255,255,255,.2); font: 800 11px 'Plus Jakarta Sans', sans-serif; color: #fff;">MRG</div>
+      <div>
+        <div style="font: 700 15px 'Plus Jakarta Sans', sans-serif; color: #fff;">Gateway</div>
+        <div style="font-size: 11.5px; color: #a9bbdb;">Regulatory platform</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="navsec">Office</div>
+      <a href="/dashboard" class="on" aria-current="page"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Overview</a>
+      <a href="/projects"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>Projects</a>
+      <div class="navsec">Work</div>
+      <a href="/cases?scope=organisation"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>Cases</a>
+      <a href="/clients?scope=organisation"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>Clients</a>
+      <a href="/bd-scope"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>BD Scope</a>
+      <a href="/pulse"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Daily Pulse</a>
+      <a href="/reports"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>Reports</a>
+      <div class="navsec">Account</div>
+      <a href="/profile"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>Profile</a>
+    </nav>
+    <div style="margin-top: auto; padding-top: 24px;">
+      <button type="button" style="width: 100%; min-height: 44px; display: flex; justify-content: center; align-items: center; gap: 8px; border-radius: 10px; border: 1px solid rgba(148,197,255,.2); background: rgba(2,6,23,.25); color: #e5edf9; font: 600 13px 'Inter', sans-serif; cursor: pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>Sign out</button>
+    </div>
+  </aside>
+
+  <!-- ═════════ MAIN COLUMN ═════════ -->
+  <div class="col">
+
+    <!-- TOP BAR -->
+    <header class="topbar" style="min-height: 72px; display: flex; flex-wrap: nowrap; align-items: center; gap: 14px; padding: 12px 24px; background: #050c1c; border-bottom: 1px solid rgba(148,197,255,.08);">
+      <div style="flex: none;">
+        <div style="font: 700 10px 'Inter', sans-serif; letter-spacing: .2em; color: #8fa3c7; text-transform: uppercase;">Executive</div>
+        <h1 style="margin: 3px 0 0; font: 700 17px 'Plus Jakarta Sans', sans-serif; color: #fff; letter-spacing: -.02em;">Company overview</h1>
+      </div>
+      <label class="search" style="margin-left: auto; flex: 0 1 560px; min-width: 0; display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(148,197,255,.18); background: rgba(255,255,255,.02); color: #8fa3c7;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" placeholder="Search applications, MDMA, clients…" aria-label="Search by application number, MDMA number, client, or manufacturer" style="flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #fff; font: 400 13.5px 'Inter', sans-serif;">
+      </label>
+      <nav class="vers" aria-label="Overview version">
+        <a href="ceo-company-overview.html">V1</a>
+        <a href="v2.html">V2</a>
+        <a href="v3.html" aria-current="page">V3</a>
+        <a href="v4.html">V4</a>
+        <a href="v5.html">V5</a>
+        <a href="v6.html">V6</a>
+      </nav>
+      <button type="button" aria-label="Notifications, 4 unread" style="position: relative; width: 44px; height: 44px; border-radius: 50%; background: #fff; color: #0b1a38; border: 0; display: grid; place-items: center; cursor: pointer; flex: none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        <span style="position: absolute; top: -2px; right: -2px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #e11d48; color: #fff; font: 700 10px 'Inter', sans-serif; display: grid; place-items: center; border: 2px solid #050c1c;">4</span>
+      </button>
+      <div class="who" style="display: flex; flex: none; align-items: center; gap: 10px; padding: 4px 16px 4px 4px; border-radius: 999px; border: 1px solid rgba(148,197,255,.16); background: rgba(255,255,255,.03);">
+        <span style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #1e40af); color: #fff; font: 700 11px 'Inter', sans-serif; display: grid; place-items: center;">AH</span>
+        <div class="who-name">
+          <div style="font: 700 13px 'Plus Jakarta Sans', sans-serif; color: #fff;">Amina Hassan</div>
+          <div style="font-size: 11px; color: #8fa3c7;">CEO</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ═════════ BODY — the only scrolling area ═════════ -->
+    <main class="scroller" style="background: #0a1222;">
+      <div style="max-width: 1320px; margin: 0 auto; padding: 24px 28px 56px; display: flex; flex-direction: column; gap: 32px;">
+
+        <!-- ════ 1 · ORGANISATION AT A GLANCE ════ -->
+        <section class="bento b1" aria-label="Organisation at a glance">
+
+          <!-- welcome (tall, light — unlike the dark metric cards) -->
+          <div class="hello" style="grid-area: welcome;">
+            <div class="hello-body">
+              <span class="hello-mark" aria-hidden="true">AH</span>
+              <h2 class="hello-title">Good afternoon,<br>Amina</h2>
+              <div class="hello-foot">
+                <p class="hello-copy">Portfolio is active with<br><b>emerging exceptions</b> to monitor.</p>
+                <span class="chip hello-chip"><i></i>Watch conditions</span>
+              </div>
+            </div>
+            <div class="hello-bar">
+              <a href="/cases?scope=organisation" class="pill hello-queue"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/><path d="M8 10v4"/><path d="M12 10v2"/><path d="M16 10v6"/></svg>Case queue</a>
+              <button type="button" class="hello-refresh" aria-label="Refresh figures"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></button>
+            </div>
+          </div>
+
+          <!-- active cases (big) -->
+          <a href="/cases?tab=open&amp;scope=organisation" class="bc" style="grid-area: active; min-height: 250px;">
+            <span class="top"><span><span class="cl" style="font-size: 18px;">Active cases</span><span class="cc">67% of everything on record</span></span><span class="go">Open queue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></span>
+            <span class="huge">210</span>
+            <span style="display: flex; align-items: center; flex-wrap: wrap; gap: 14px;">
+              <span style="flex: 1; min-width: 120px; height: 8px; border-radius: 4px; background: #1c2842; overflow: hidden;"><span style="display: block; width: 67%; height: 100%; border-radius: 4px; background: #2563eb;"></span></span>
+              <span style="font-size: 12.5px; color: #94a3b8;">210 of 314 on record</span>
+            </span>
+          </a>
+
+          <!-- health (tall) -->
+          <a href="#composition" class="bc prem health" style="grid-area: health;" aria-label="Operating health, 77 of 100. Watch conditions. Stable, not yet clear. Score composition.">
+            <span class="health-fig">
+              <span class="huge">77</span>
+              <span class="health-out">/100</span>
+            </span>
+            <span class="health-rest" style="--value: 77; --tick-on: #fbbf24; --tick-off: rgba(255,255,255,.16);">
+              <div class="mrg-tick__meter is-fill" role="meter" aria-label="Operating health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="77" aria-valuetext="77 of 100"></div>
+              <span class="health-foot">
+                <span class="cl" style="font-size: 18px;">Operating health</span>
+                <span class="cc">Stable, not yet clear</span>
+                <span class="chip" style="background: rgba(245,158,11,.14); color: #fbbf24;"><i style="width: 6px; height: 6px; border-radius: 50%; background: #fbbf24;"></i>Watch conditions</span>
+              </span>
+              <span class="health-bar">
+                <span class="go">Score composition</span>
+                <span class="health-go" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+              </span>
+            </span>
+          </a>
+
+          <!-- with the authority -->
+          <a href="/cases?tab=submitted&amp;scope=organisation" class="bc" style="grid-area: witha;">
+            <span class="fig">83</span>
+            <span><span class="cl">With the authority</span><span class="cc">Submitted + query response</span></span>
+          </a>
+
+          <!-- closed this month -->
+          <a href="/reports/monthly" class="bc" style="grid-area: closed;">
+            <span class="top"><span class="fig">14</span><span class="chip" style="background: rgba(16,185,129,.14); color: #34d399;">This month</span></span>
+            <span><span class="cl">Closed this month</span><span class="cc">Decisions recorded so far</span></span>
+          </a>
+
+          <!-- customers -->
+          <a href="/clients?scope=organisation" class="bc" style="grid-area: cust;">
+            <span class="top"><span class="fig">42</span>
+              <span aria-hidden="true" style="display: flex;">
+                <span style="width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: #0c1427; border: 2px solid #22d3ee; color: #22d3ee; font-size: 9.5px; font-weight: 700;">MD</span>
+                <span style="width: 30px; height: 30px; margin-left: -8px; border-radius: 50%; display: grid; place-items: center; background: #0c1427; border: 2px solid #fbbf24; color: #fbbf24; font-size: 9.5px; font-weight: 700;">PH</span>
+                <span style="width: 30px; height: 30px; margin-left: -8px; border-radius: 50%; display: grid; place-items: center; background: #0c1427; border: 2px solid #c084fc; color: #c084fc; font-size: 9.5px; font-weight: 700;">CO</span>
+              </span>
+            </span>
+            <span><span class="cl">Customers</span><span class="cc">3 active divisions</span></span>
+          </a>
+
+          <!-- manufacturers -->
+          <a href="/clients?scope=organisation" class="bc" style="grid-area: manu;" aria-label="Manufacturers, 118, on the customer book">
+            <span class="fig">118</span>
+            <span><span class="cl">Manufacturers</span><span class="cc">On the customer book</span></span>
+          </a>
+
+          <!-- authorizations -->
+          <a href="/clients?scope=organisation" class="bc" style="grid-area: auth;">
+            <span class="top"><span class="fig">640</span><span class="chip" style="background: #0c1427; color: #a3b1c6;">88 AR</span></span>
+            <span><span class="cl">Authorizations</span><span class="cc">Active authorizations · 88 AR licences</span></span>
+          </a>
+
+          <!-- needs attention + unassigned -->
+          <div class="bc" style="grid-area: attn; border-color: rgba(245,158,11,.35); background: linear-gradient(180deg, rgba(245,158,11,.07), transparent 60%), #111a2e;">
+            <span class="split2" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+              <a href="/clients?scope=organisation" style="color: inherit;"><span class="fig" style="color: #fbbf24;">6</span><span class="cl" style="margin-top: 14px; font-size: 14px;">Needs attention</span><span class="cc" style="font-size: 12px;">Licence ≤30 days or a query on file</span></a>
+              <a href="/clients?scope=organisation&amp;filter=unassigned" style="color: inherit;"><span class="fig" style="color: #fbbf24;">3</span><span class="cl" style="margin-top: 14px; font-size: 14px;">Unassigned clients</span><span class="cc" style="font-size: 12px;">No account manager</span></a>
+            </span>
+          </div>
+        </section>
+
+        <!-- ════ 2 · WHERE THE CASELOAD SITS ════ -->
+        <section class="cload" aria-labelledby="caseloadTitle">
+          <div class="summary">
+            <div class="head">
+              <h2 id="caseloadTitle">Where the caseload sits <span class="cat" id="catName">· Cosmetics</span></h2>
+              <div class="tabs" role="tablist" aria-label="Product category" id="caseloadTabs"></div>
+            </div>
+            <div class="dist">
+              <div class="bar" id="caseloadBar" role="img"></div>
+              <p class="cap" id="caseloadCap"></p>
+            </div>
+          </div>
+          <div class="cards" id="caseloadCards"></div>
+        </section>
+
+        <!-- ════ 2b · WHERE THE CASELOAD SITS — tick cards ════ -->
+        <section class="cload cload-b" aria-labelledby="caseloadTitleB">
+          <div class="summary">
+            <div class="head">
+              <h2 id="caseloadTitleB">Where the caseload sits <span class="cat" id="catNameB">· Cosmetics</span></h2>
+              <div class="tabs" role="tablist" aria-label="Product category" id="caseloadTabsB"></div>
+            </div>
+            <div class="dist">
+              <div class="bar" id="caseloadBarB" role="img"></div>
+              <p class="cap" id="caseloadCapB"></p>
+            </div>
+          </div>
+          <div class="cards" id="caseloadCardsB"></div>
+        </section>
+
+        <!-- ════ 2c · WHERE THE CASELOAD SITS — progress divider ════ -->
+        <section class="cload cload-c" aria-labelledby="caseloadTitleC">
+          <div class="summary">
+            <div class="head">
+              <h2 id="caseloadTitleC">Where the caseload sits <span class="cat" id="catNameC">· Cosmetics</span></h2>
+              <div class="tabs" role="tablist" aria-label="Product category" id="caseloadTabsC"></div>
+            </div>
+            <div class="dist">
+              <div class="bar" id="caseloadBarC" role="img"></div>
+              <p class="cap" id="caseloadCapC"></p>
+            </div>
+          </div>
+          <div class="cards" id="caseloadCardsC"></div>
+        </section>
+
+        <!-- ════ 3 · RISK & EXCEPTION BOOK ════ -->
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div class="shead">
+            <div><h2 class="h2">Risk &amp; exception book</h2><p class="h2s">Exception figures leadership reviews before opening the queue</p></div>
+            <a href="/reports/ceo" style="font-size: 13.5px; font-weight: 600; min-height: 44px; display: inline-flex; align-items: center;">CEO monitoring</a>
+          </div>
+          <section class="bento b3" aria-label="Risk and exception book">
+
+            <a href="/reports/monthly" class="bc" style="grid-area: inv; border-color: rgba(244,63,94,.4); background: linear-gradient(180deg, rgba(244,63,94,.1), transparent 55%), #111a2e;">
+              <span class="top"><span class="chip" style="background: rgba(244,63,94,.16); color: #fb7185;">Stop</span><span class="go" style="color: #fb7185;">Open queue <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></span>
+              <span class="huge" style="color: #fb7185;">7</span>
+              <span><span class="cl" style="font-size: 18px;">Outstanding invoices</span><span class="cc">At least one invoice is overdue</span></span>
+            </a>
+
+            <a href="/cases?tab=query_response&amp;scope=organisation" class="bc" style="grid-area: qr; flex-direction: row; align-items: stretch;">
+              <span style="display: flex; flex-direction: column; justify-content: space-between; gap: 14px; flex: 1;">
+                <span class="chip" style="align-self: flex-start; background: rgba(245,158,11,.14); color: #fbbf24;">Warn</span>
+                <span><span class="cl" style="font-size: 18px;">Query response</span><span class="cc">Cases waiting on our reply to the authority</span></span>
+              </span>
+              <span style="display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; gap: 14px;">
+                <span class="go">Open queue <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+                <span class="huge" style="font-size: 88px; color: #fbbf24;">35</span>
+              </span>
+            </a>
+
+            <a href="/reports/ceo" class="bc" style="grid-area: over;">
+              <span class="top"><span class="fig" style="color: #fbbf24;">11</span><span class="chip" style="background: rgba(245,158,11,.14); color: #fbbf24;">Warn</span></span>
+              <span><span class="cl">Overdue tasks</span><span class="go" style="margin-top: 6px;">Open queue <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></span>
+            </a>
+
+            <a href="/reports/ceo" class="bc" style="grid-area: stale;">
+              <span class="top"><span class="fig" style="color: #fbbf24;">9</span><span class="chip" style="background: rgba(245,158,11,.14); color: #fbbf24;">Warn</span></span>
+              <span><span class="cl">Stale applications</span><span class="go" style="margin-top: 6px;">Open queue <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></span>
+            </a>
+
+            <a href="/clients" class="bc" style="grid-area: lic; flex-direction: row; align-items: center; justify-content: flex-start; gap: 18px;">
+              <span class="tile" style="border-radius: 50%; background: rgba(245,158,11,.12); color: #fbbf24; border: 1px solid rgba(245,158,11,.3);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg></span>
+              <span style="flex: 1; min-width: 0;"><span class="cl">Licences in 30 days</span><span class="go" style="margin-top: 6px;">Open queue <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></span>
+              <span class="pill" style="font: 800 22px 'Plus Jakarta Sans', sans-serif; color: #fbbf24; padding: 0 22px;">4</span>
+            </a>
+
+            <a href="/ghad-reconciliation" class="bc" style="grid-area: ghad;">
+              <span class="top"><span class="fig" style="color: #fbbf24;">2</span><span class="chip" style="background: rgba(245,158,11,.14); color: #fbbf24;">Warn</span></span>
+              <span><span class="cl">GHAD divergences</span><span class="go" style="margin-top: 6px;">Open queue <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></span>
+            </a>
+
+            <!-- score composition (tall) -->
+            <div id="composition" class="bc" style="grid-area: comp; justify-content: flex-start;">
+              <span><span class="cl" style="font-size: 18px;">Health score</span><span class="cc">Starts at 100, minus these four rates</span></span>
+              <div>
+                <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px;"><span style="font-weight: 500; color: #e6edf7;">Overdue tasks</span><span style="font-weight: 700; color: #f5f8fc; font-variant-numeric: tabular-nums;">−11.0 <span style="font-weight: 400; color: #8b9ab0;">/ 20</span></span></div>
+                <div style="position: relative; height: 6px; margin-top: 10px; border-radius: 3px; background: #1c2842;"><div style="position: absolute; left: 0; top: 0; bottom: 0; width: 55%; border-radius: 3px; background: #fb7185;"></div><div style="position: absolute; top: 50%; left: 55%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fb7185; border: 3px solid #111a2e;"></div></div>
+                <div style="margin-top: 7px; font-size: 12px; color: #8b9ab0;">11 overdue ÷ 80 open tasks × 80</div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px;"><span style="font-weight: 500; color: #e6edf7;">Query response</span><span style="font-weight: 700; color: #f5f8fc; font-variant-numeric: tabular-nums;">−8.3 <span style="font-weight: 400; color: #8b9ab0;">/ 20</span></span></div>
+                <div style="position: relative; height: 6px; margin-top: 10px; border-radius: 3px; background: #1c2842;"><div style="position: absolute; left: 0; top: 0; bottom: 0; width: 42%; border-radius: 3px; background: #fbbf24;"></div><div style="position: absolute; top: 50%; left: 42%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fbbf24; border: 3px solid #111a2e;"></div></div>
+                <div style="margin-top: 7px; font-size: 12px; color: #8b9ab0;">35 ÷ 210 open cases × 50</div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px;"><span style="font-weight: 500; color: #e6edf7;">Stale applications</span><span style="font-weight: 700; color: #f5f8fc; font-variant-numeric: tabular-nums;">−1.7 <span style="font-weight: 400; color: #8b9ab0;">/ 15</span></span></div>
+                <div style="position: relative; height: 6px; margin-top: 10px; border-radius: 3px; background: #1c2842;"><div style="position: absolute; left: 0; top: 0; bottom: 0; width: 11%; border-radius: 3px; background: #fbbf24;"></div><div style="position: absolute; top: 50%; left: 11%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fbbf24; border: 3px solid #111a2e;"></div></div>
+                <div style="margin-top: 7px; font-size: 12px; color: #8b9ab0;">9 ÷ 210 open cases × 40</div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px;"><span style="font-weight: 500; color: #e6edf7;">GHAD divergences</span><span style="font-weight: 700; color: #f5f8fc; font-variant-numeric: tabular-nums;">−2.0 <span style="font-weight: 400; color: #8b9ab0;">/ 8</span></span></div>
+                <div style="position: relative; height: 6px; margin-top: 10px; border-radius: 3px; background: #1c2842;"><div style="position: absolute; left: 0; top: 0; bottom: 0; width: 25%; border-radius: 3px; background: #fbbf24;"></div><div style="position: absolute; top: 50%; left: 25%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fbbf24; border: 3px solid #111a2e;"></div></div>
+                <div style="margin-top: 7px; font-size: 12px; color: #8b9ab0;">2 divergences</div>
+              </div>
+              <span class="inner" style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; font-size: 13px;"><span style="color: #94a3b8;">100 − 23</span><span style="font: 800 20px 'Plus Jakarta Sans', sans-serif; color: #fbbf24;">77</span></span>
+            </div>
+          </section>
+        </div>
+
+        <!-- ════ 4 · BRIEFS + REPORTS ════ -->
+        <section class="bento b4" aria-label="Active briefs and reports">
+
+          <div class="bc" style="grid-area: briefs; justify-content: flex-start;">
+            <span class="top">
+              <span><span class="cl" style="font-size: 20px;">Active briefs</span><span class="cc">Grouped by the country each brief belongs to</span></span>
+              <a href="/projects" style="font-size: 13px; font-weight: 600; min-height: 44px; display: inline-flex; align-items: center; white-space: nowrap;">All projects</a>
+            </span>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <span style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #8b9ab0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Syria</span>
+              <a href="/projects/dcc-introduction" class="inner" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; color: #e6edf7;">
+                <span class="tile" style="width: 40px; height: 40px; border-radius: 12px; background: rgba(34,211,238,.12); color: #67e8f9;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg></span>
+                <span style="flex: 1; min-width: 0;"><span style="display: block; font-size: 14px; font-weight: 600; color: #f5f8fc;">Damascus Certification Center</span><span style="display: block; margin-top: 2px; font-size: 12.5px; color: #94a3b8;">Ministry of Health · DCC</span></span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7cb4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+              </a>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <span style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #8b9ab0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>KSA</span>
+              <a href="/projects/moh-violations" class="inner" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; color: #e6edf7;">
+                <span class="tile" style="width: 40px; height: 40px; border-radius: 12px; background: rgba(34,211,238,.12); color: #67e8f9;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg></span>
+                <span style="flex: 1; min-width: 0;"><span style="display: block; font-size: 14px; font-weight: 600; color: #f5f8fc;">Directorate of Violations</span><span style="display: block; margin-top: 2px; font-size: 12.5px; color: #94a3b8;">Ministry of Health · Al Bidayah</span></span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7cb4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+              </a>
+              <a href="/projects/moh-inspection" class="inner" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; color: #e6edf7;">
+                <span class="tile" style="width: 40px; height: 40px; border-radius: 12px; background: rgba(34,211,238,.12); color: #67e8f9;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg></span>
+                <span style="flex: 1; min-width: 0;"><span style="display: block; font-size: 14px; font-weight: 600; color: #f5f8fc;">Directorate of Inspection</span><span style="display: block; margin-top: 2px; font-size: 12.5px; color: #94a3b8;">Ministry of Health · Al Bidayah</span></span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7cb4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+              </a>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <span style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #8b9ab0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Middle East</span>
+              <a href="/projects/manara-raps" class="inner" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; color: #e6edf7;">
+                <span class="tile" style="width: 40px; height: 40px; border-radius: 12px; background: rgba(34,211,238,.12); color: #67e8f9;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg></span>
+                <span style="flex: 1; min-width: 0;"><span style="display: block; font-size: 14px; font-weight: 600; color: #f5f8fc;">Manara</span><span style="display: block; margin-top: 2px; font-size: 12.5px; color: #94a3b8;">MRG · RAPS</span></span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7cb4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="bc" style="grid-area: rhead; flex-direction: row; align-items: center; justify-content: flex-start; gap: 16px;">
+            <span class="tile" style="border-radius: 50%; background: #0c1427; border: 1px solid #1c2842; color: #60a5fa;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></span>
+            <span><span class="cl" style="font-size: 18px;">Reports &amp; deep dives</span><span class="cc">Status mix, exceptions, and the live queue live in these views</span></span>
+          </div>
+
+          <a href="/reports/ceo" class="bc" style="grid-area: r1;">
+            <span class="top"><span class="tile" style="background: rgba(34,211,238,.14); color: #22d3ee;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+            <span><span class="cl">CEO monitoring</span><span class="cc">Queries and exceptions</span></span>
+          </a>
+          <a href="/reports/monthly" class="bc" style="grid-area: r2;">
+            <span class="top"><span class="tile" style="background: rgba(52,211,153,.14); color: #34d399;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+            <span><span class="cl">Monthly snapshot</span><span class="cc">Throughput and closures</span></span>
+          </a>
+          <a href="/cases?scope=organisation" class="bc" style="grid-area: r3;">
+            <span class="top"><span class="tile" style="background: rgba(129,140,248,.16); color: #818cf8;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.930 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/><path d="M8 10v4"/><path d="M12 10v2"/><path d="M16 10v6"/></svg></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+            <span><span class="cl">Case queue</span><span class="cc">Cases across all clients</span></span>
+          </a>
+          <a href="/clients?scope=organisation" class="bc" style="grid-area: r4;">
+            <span class="top"><span class="tile" style="background: rgba(251,191,36,.14); color: #fbbf24;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+            <span><span class="cl">Client directory</span><span class="cc">All relationships</span></span>
+          </a>
+        </section>
+
+        <section class="prepshow" aria-label="In preparation card">
+          <a class="pcard prep" href="/cases?tab=open&amp;scope=organisation">
+            <div class="pcard__head">
+              <h2 class="pcard__title">In preparation</h2>
+              <span class="pcard__go" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4.5 11.5L11.5 4.5M5.5 4.5h6v6"/>
+                </svg>
+              </span>
+            </div>
+            <div class="pcard__spacer"></div>
+            <div class="pcard__metric">
+              <span class="pcard__count">13</span>
+              <span class="pcard__of">of 32 cases</span>
+            </div>
+            <div class="ticks" role="img" aria-label="13 of 32 cases">
+              <div class="tick on"></div><div class="tick on"></div><div class="tick on"></div><div class="tick on"></div>
+              <div class="tick on"></div><div class="tick on"></div><div class="tick on"></div><div class="tick on"></div>
+              <div class="tick on"></div><div class="tick on"></div><div class="tick on"></div><div class="tick on"></div>
+              <div class="tick on"></div>
+              <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div>
+              <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div>
+              <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div>
+              <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div>
+              <div class="tick"></div><div class="tick"></div><div class="tick"></div>
+            </div>
+            <p class="pcard__caption"><strong>41%</strong> of caseload</p>
+          </a>
+        </section>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+(function () {
+  var STAGES = [
+    { k: 'prep', name: 'In preparation', note: 'Not yet submitted', tab: 'open' },
+    { k: 'sub', name: 'Submitted to authority', note: 'Under authority review', tab: 'submitted' },
+    { k: 'query', name: 'Authority query', note: 'Awaiting our response', tab: 'query_response' },
+    { k: 'appr', name: 'Approved', note: 'All time in view', tab: 'closed' }
+  ];
+  var DATA = {
+    all: { label: 'All', total: 314, v: [72, 32, 9, 84], dep: '' },
+    med: { label: 'Medical Devices', total: 120, v: [38, 17, 5, 44], dep: 'medical_devices' },
+    pharma: { label: 'Pharma', total: 70, v: [21, 9, 3, 28], dep: 'pharma' },
+    cos: { label: 'Cosmetics', total: 20, v: [13, 6, 1, 12], dep: 'cosmetics' }
+  };
+  var TICKS = 32;
+  var queueArrow = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+  var tickArrow = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 11.5 11.5 4.5M5.5 4.5h6v6"/></svg>';
+
+  function mount(cfg) {
+    var cur = 'cos';
+    var tabs = document.getElementById(cfg.tabs);
+    var bar = document.getElementById(cfg.bar);
+    var cards = document.getElementById(cfg.cards);
+
+    Object.keys(DATA).forEach(function (id) {
+      var d = DATA[id];
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'tab';
+      b.setAttribute('role', 'tab');
+      b.id = cfg.prefix + 'tab-' + id;
+      b.innerHTML = d.label + '<span class="n">' + d.total + '</span>';
+      b.addEventListener('click', function () { select(id); });
+      tabs.appendChild(b);
+    });
+
+    tabs.addEventListener('keydown', function (e) {
+      var ids = Object.keys(DATA);
+      var i = ids.indexOf(cur);
+      if (e.key === 'ArrowRight') i = (i + 1) % ids.length;
+      else if (e.key === 'ArrowLeft') i = (i - 1 + ids.length) % ids.length;
+      else return;
+      e.preventDefault();
+      select(ids[i]);
+      document.getElementById(cfg.prefix + 'tab-' + ids[i]).focus();
+    });
+
+    STAGES.forEach(function (s, i) {
+      var seg = document.createElement('div');
+      seg.className = 'seg';
+      seg.style.background = 'var(--s-' + s.k + ')';
+      seg.tabIndex = 0;
+      seg.dataset.i = i;
+      seg.innerHTML = '<span class="tip"></span>';
+      bar.appendChild(seg);
+
+      var a = document.createElement('a');
+      a.dataset.i = i;
+      if (cfg.variant === 'ticks') {
+        a.className = 'pcard ' + s.k;
+        a.innerHTML = '<div class="pcard__head"><h3 class="pcard__title">' + s.name + '</h3><span class="pcard__go">' + tickArrow + '</span></div><div class="pcard__spacer"></div><div class="pcard__metric"><span class="pcard__count">0</span><span class="pcard__of">of 0 cases</span></div><div class="ticks" role="img"></div><p class="pcard__caption"><strong class="pcard__pct">0%</strong> of caseload</p>';
+      } else if (cfg.variant === 'divider') {
+        a.className = 'dcard ' + s.k;
+        a.innerHTML = '<div class="dcard__top"><h3 class="dcard__title">' + s.name + '</h3><span class="dcard__go">' + queueArrow + '</span></div><p class="dcard__note">' + s.note + '</p><div class="dcard__count">0</div><span class="stage-rule"></span><p class="dcard__cap"><strong class="dcard__pct">0%</strong> of caseload</p>';
+      } else {
+        a.className = 'card ' + s.k;
+        a.innerHTML = '<div class="card-top"><span class="label"><span class="dot"></span><span>' + s.name + '</span></span><span class="go">' + queueArrow + '</span></div><p class="note">' + s.note + '</p><div class="count">0</div><div class="meter"><div class="track"><div class="fill"></div></div><span class="pct">0%</span></div>';
+      }
+      cards.appendChild(a);
+
+      [seg, a].forEach(function (el) {
+        el.addEventListener('mouseenter', function () { hl(i); });
+        el.addEventListener('mouseleave', function () { hl(-1); });
+        el.addEventListener('focus', function () { hl(i); });
+        el.addEventListener('blur', function () { hl(-1); });
+      });
+    });
+
+    function cardSel() {
+      if (cfg.variant === 'ticks') return '.pcard';
+      if (cfg.variant === 'divider') return '.dcard';
+      return '.card';
+    }
+
+    function hl(i) {
+      bar.classList.toggle('dim', i >= 0);
+      bar.querySelectorAll('.seg').forEach(function (s, j) { s.classList.toggle('on', j === i); });
+      cards.querySelectorAll(cardSel()).forEach(function (c, j) { c.classList.toggle('on', j === i); });
+    }
+
+    function countTo(el, to) {
+      var from = +el.textContent || 0;
+      var t0 = performance.now();
+      var dur = matchMedia('(prefers-reduced-motion:reduce)').matches ? 0 : 500;
+      (function step(t) {
+        var p = dur ? Math.min(1, (t - t0) / dur) : 1;
+        var e = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(from + (to - from) * e);
+        if (p < 1) requestAnimationFrame(step);
+      })(t0);
+    }
+
+    function paintTicks(host, n, sum) {
+      var on = sum ? Math.round(n / sum * TICKS) : 0;
+      if (n > 0 && on < 1) on = 1;
+      if (n >= sum && sum > 0) on = TICKS;
+      var html = '';
+      for (var i = 0; i < TICKS; i++) html += '<div class="tick' + (i < on ? ' on' : '') + '"></div>';
+      host.innerHTML = html;
+      host.setAttribute('aria-label', n + ' of ' + sum + ' cases');
+    }
+
+    function select(id) {
+      cur = id;
+      var d = DATA[id];
+      var sum = d.v.reduce(function (a, b) { return a + b; }, 0);
+      tabs.querySelectorAll('.tab').forEach(function (b) {
+        var on = b.id === cfg.prefix + 'tab-' + id;
+        b.setAttribute('aria-selected', String(on));
+        b.tabIndex = on ? 0 : -1;
+      });
+      document.getElementById(cfg.cat).textContent = (innerWidth > 560 ? '· ' : '') + (id === 'all' ? 'All categories' : d.label);
+      var pcts = d.v.map(function (v) { return sum ? Math.round(v / sum * 100) : 0; });
+      bar.setAttribute('aria-label', STAGES.map(function (s, i) { return s.name + ' ' + d.v[i] + ' (' + pcts[i] + '%)'; }).join(', '));
+      bar.querySelectorAll('.seg').forEach(function (s, i) {
+        s.style.flexGrow = d.v[i];
+        s.querySelector('.tip').textContent = STAGES[i].name + ' · ' + d.v[i] + ' ' + (d.v[i] === 1 ? 'file' : 'files') + ' · ' + pcts[i] + '%';
+        s.setAttribute('aria-label', STAGES[i].name + ': ' + d.v[i] + ' files');
+      });
+      cards.querySelectorAll(cardSel()).forEach(function (c, i) {
+        var n = d.v[i];
+        if (cfg.variant === 'ticks') {
+          countTo(c.querySelector('.pcard__count'), n);
+          c.querySelector('.pcard__of').textContent = 'of ' + sum + (sum === 1 ? ' case' : ' cases');
+          c.querySelector('.pcard__pct').textContent = pcts[i] + '%';
+          paintTicks(c.querySelector('.ticks'), n, sum);
+        } else if (cfg.variant === 'divider') {
+          countTo(c.querySelector('.dcard__count'), n);
+          c.querySelector('.dcard__pct').textContent = pcts[i] + '%';
+          c.querySelector('.stage-rule').style.setProperty('--share', pcts[i]);
+        } else {
+          countTo(c.querySelector('.count'), n);
+          c.querySelector('.fill').style.width = pcts[i] + '%';
+          c.querySelector('.pct').textContent = pcts[i] + '%';
+        }
+        c.href = '/cases?tab=' + STAGES[i].tab + '&scope=organisation' + (d.dep ? '&department=' + d.dep : '');
+        c.setAttribute('aria-label', STAGES[i].name + ': ' + n + ' files, ' + pcts[i] + '% of caseload. Open list');
+      });
+      document.getElementById(cfg.cap).innerHTML = '<b>' + sum + '</b> files across these four stages. The tab count also includes rejected, cancelled and inactive files.';
+    }
+
+    select(cur);
+  }
+
+  mount({ tabs: 'caseloadTabs', bar: 'caseloadBar', cards: 'caseloadCards', cat: 'catName', cap: 'caseloadCap', prefix: '' });
+  mount({ tabs: 'caseloadTabsB', bar: 'caseloadBarB', cards: 'caseloadCardsB', cat: 'catNameB', cap: 'caseloadCapB', prefix: 'b-', variant: 'ticks' });
+  mount({ tabs: 'caseloadTabsC', bar: 'caseloadBarC', cards: 'caseloadCardsC', cat: 'catNameC', cap: 'caseloadCapC', prefix: 'c-', variant: 'divider' });
+})();
+</script>
+</body>
+</html>

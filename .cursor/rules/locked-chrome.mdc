@@ -1,0 +1,35 @@
+---
+description: Keep the sidebar and header fixed. New overview versions change only the main content.
+alwaysApply: true
+---
+
+# Locked sidebar and header
+
+The sidebar and header are shared chrome. A new overview version changes the scrolling page only.
+
+## Do not change
+
+- Markup inside `aside.side` and `header.topbar`
+- CSS for `.side`, `.logo`, `.nav`, `.navsec`, `.signout-btn`, `.topbar`, `.search`, `.vers`, `.notif`, `.who`
+- Sidebar width (268px), nav items, logo, sign out, search, notifications, or the signed-in user
+- Primary blue `#2563eb` on the chrome (active version pill and focus ring)
+
+## New version
+
+Copy the latest overview file. Keep its sidebar and header. Replace only what is inside `main.scroller`.
+
+Meters and emphasis stay in the `#2563eb` family. Amber and sage are status colors on cards only.
+
+The only allowed header edit is appending the new version inside `nav.vers`.
+
+```html
+<a href="v5.html">V5</a>
+```
+
+```css
+/* ❌ BAD — recolors the header for a new layout */
+.topbar { background: #fff; }
+
+/* ✅ GOOD — page canvas only */
+.board { background: #0b1220; }
+```

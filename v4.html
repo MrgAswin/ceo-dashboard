@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Company overview · MRG Gateway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;color-scheme:dark}
+body{background:#060c1a;overflow:hidden;-webkit-font-smoothing:antialiased}
+a{color:#7cb4ff;text-decoration:none}a:hover{color:#bcd7ff}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid #7cb4ff;outline-offset:2px}
+
+.shell{display:flex;flex-wrap:nowrap;align-items:stretch;height:100vh;height:100dvh;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.side{
+  flex:0 0 268px;width:268px;height:100vh;height:100dvh;
+  overflow-x:hidden;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:#1e3058 transparent;
+  background:linear-gradient(180deg,#0d1a38 0%,#0b1e4a 45%,#0c2d6a 100%);
+  border-right:1px solid rgba(148,197,255,.09);
+  padding:18px 14px 20px;
+  display:flex;flex-direction:column;
+  position:relative
+}
+.side::before{
+  content:"";pointer-events:none;position:absolute;top:0;left:0;right:0;height:240px;
+  background:radial-gradient(ellipse 130% 42% at 50% 0%,rgba(59,130,246,.16),transparent 70%)
+}
+.side::-webkit-scrollbar{width:5px}
+.side::-webkit-scrollbar-thumb{background:#1e3058;border-radius:5px}
+
+.logo{display:flex;gap:11px;align-items:center;padding:4px 8px 18px;position:relative;z-index:1}
+.logo-mark{
+  width:38px;height:38px;border-radius:11px;
+  display:grid;place-items:center;
+  background:linear-gradient(145deg,#1f4096,#0c1e54);
+  border:1px solid rgba(148,197,255,.26);
+  font:800 11px 'Plus Jakarta Sans',sans-serif;color:#fff;
+  box-shadow:0 6px 16px -6px rgba(29,78,216,.55),inset 0 1px 0 rgba(255,255,255,.12)
+}
+.logo-name{font:700 14.5px 'Plus Jakarta Sans',sans-serif;color:#fff}
+.logo-sub{font-size:11px;color:#8faacf;margin-top:1px}
+
+.nav{display:flex;flex-direction:column;position:relative;z-index:1}
+.navsec{font:700 10px 'Inter',sans-serif;letter-spacing:.16em;color:#5d7aa0;text-transform:uppercase;padding:16px 8px 6px}
+.nav a{
+  display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:10px;
+  font-size:13.5px;font-weight:500;color:#b8cdea;margin-bottom:1px;
+  transition:background .13s,color .13s
+}
+.nav a svg{opacity:.65;flex:none;transition:opacity .13s}
+.nav a:hover{background:rgba(255,255,255,.055);color:#e8f0fc}
+.nav a:hover svg{opacity:.9}
+.nav a.on{background:rgba(255,255,255,.08);color:#fff;font-weight:600;box-shadow:0 0 0 1px rgba(148,197,255,.11) inset}
+.nav a.on svg{opacity:1}
+
+.signout-btn{
+  width:100%;min-height:42px;display:flex;justify-content:center;align-items:center;gap:8px;
+  border-radius:10px;border:1px solid rgba(148,197,255,.15);
+  background:rgba(255,255,255,.035);color:#b8cdea;
+  font:600 13px 'Inter',sans-serif;transition:background .13s,color .13s
+}
+.signout-btn:hover{background:rgba(255,255,255,.07);color:#e8f0fc}
+
+/* ── MAIN COLUMN ── */
+.col{flex:1 1 auto;width:calc(100% - 268px);height:100vh;height:100dvh;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── TOPBAR ── */
+.topbar{
+  flex:0 0 auto;display:flex;flex-wrap:nowrap;align-items:center;gap:14px;
+  padding:0 26px;min-height:68px;
+  background:rgba(6,12,26,.9);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(148,197,255,.08);z-index:20
+}
+.topbar-kicker{font:700 10px 'Inter',sans-serif;letter-spacing:.2em;color:#6e8db5;text-transform:uppercase}
+.topbar-h1{margin:3px 0 0;font:700 17px 'Plus Jakarta Sans',sans-serif;color:#fff;letter-spacing:-.02em}
+
+.search{
+  margin-left:auto;flex:0 1 520px;min-width:0;
+  display:flex;align-items:center;gap:9px;height:38px;padding:0 13px;
+  border-radius:999px;border:1px solid rgba(148,197,255,.13);
+  background:rgba(255,255,255,.02);color:#6e8db5;transition:border-color .14s
+}
+.search:focus-within{border-color:rgba(148,197,255,.32)}
+.search input{flex:1;min-width:0;background:none;border:0;outline:0;color:#e8f0fc;font:400 13px 'Inter',sans-serif}
+.search input::placeholder{color:#6e8db5}
+
+.vers{display:inline-flex;flex:none;align-items:center;gap:2px;padding:3px;border-radius:999px;background:#0a1220;border:1px solid #182542}
+.vers a{
+  display:inline-flex;align-items:center;min-height:30px;padding:0 11px;
+  border-radius:999px;font:600 12px 'Inter',sans-serif;letter-spacing:.04em;
+  color:#8499b5;transition:color .13s
+}
+.vers a:hover{color:#e8f0fc}
+.vers a[aria-current="page"]{background:#2563eb;color:#fff}
+
+.notif{position:relative;width:40px;height:40px;border-radius:50%;background:#f0f4ff;color:#0b1a38;border:0;display:grid;place-items:center;flex:none;transition:background .13s}
+.notif:hover{background:#fff}
+.notif-badge{position:absolute;top:-3px;right:-3px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#e11d48;color:#fff;font:700 9.5px 'Inter',sans-serif;display:grid;place-items:center;border:2px solid #060c1a}
+
+.who{display:flex;flex:none;align-items:center;gap:9px;padding:4px 13px 4px 4px;border-radius:999px;border:1px solid rgba(148,197,255,.13);background:rgba(255,255,255,.025)}
+.who-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#1e40af);color:#fff;font:700 11px 'Inter',sans-serif;display:grid;place-items:center;flex:none}
+.who-name{font:700 13px 'Plus Jakarta Sans',sans-serif;color:#fff}
+.who-role{font-size:11px;color:#6e8db5;margin-top:1px}
+
+/* ── SCROLLER ── */
+.scroller{
+  flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;
+  scrollbar-width:thin;scrollbar-color:#d4d4d8 transparent;
+  background:#fff;color-scheme:light
+}
+.scroller::-webkit-scrollbar{width:8px}
+.scroller::-webkit-scrollbar-thumb{background:#d4d4d8;border-radius:8px;border:2px solid #fff}
+
+/* ── LIGHT SPLIT, BLUE ACCENT ── */
+.page{max-width:1180px;margin:0 auto;padding:52px 44px 88px;display:flex;flex-direction:column;gap:92px;min-width:0;color:#111827}
+.page a,.page a:hover{color:inherit}
+.band{display:grid;grid-template-columns:minmax(260px,.78fr) minmax(0,1.22fr);gap:28px 64px;align-items:stretch}
+.copy{display:flex;flex-direction:column;align-items:flex-start;min-width:0;min-height:100%}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 4px;border-radius:999px;background:#f3f4f6;color:#2563eb;font:600 13px/1 'Inter',sans-serif}
+.badge .ico{width:18px;height:18px;border-radius:5px}
+.display{margin-top:18px;font:700 46px/1.08 'Plus Jakarta Sans',sans-serif;letter-spacing:-.045em;color:#111}
+.display.sm{margin-top:0;font-size:36px}
+.lede{margin-top:16px;max-width:34ch;font-size:16px;line-height:1.55;color:#8b919a}
+.lede b{color:#111;font-weight:600}
+.go{display:inline-flex;align-items:center;gap:6px;margin-top:22px;min-height:36px;color:#2563eb;font:600 15px/1 'Inter',sans-serif}
+a.go,a.go:hover{color:#2563eb}
+a.go:hover{color:#1d4ed8}
+.actions{display:flex;align-items:center;flex-wrap:wrap;margin-top:22px}
+.actions .go{margin-top:0}
+.copy-foot{margin-top:auto;padding-top:36px;max-width:34ch}
+.quiet{font-size:15px;line-height:1.55;color:#8b919a}
+.proof{display:flex;flex-direction:column;align-items:flex-start;gap:6px;color:#111}
+.proof-num{font:700 28px/1 'Plus Jakarta Sans',sans-serif;letter-spacing:-.04em;color:#111;font-variant-numeric:tabular-nums}
+.proof-cap{font-size:14px;line-height:1.4;color:#8b919a}
+.rates{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.rates li{display:flex;justify-content:space-between;gap:16px;font-size:13.5px;color:#8b919a}
+.rates b{color:#111;font-weight:600;font-variant-numeric:tabular-nums}
+.mosaic{display:flex;flex-direction:column;gap:16px;min-width:0}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+a.stat{display:flex;flex-direction:column;justify-content:space-between;gap:28px;min-height:196px;padding:26px 26px 24px;border-radius:28px;background:#f3f4f6;color:#111;min-width:0}
+a.stat:hover{background:#e7e9ee;color:#111}
+a.stat.wide{min-height:252px;padding:30px 32px 28px}
+.krow{display:flex;align-items:center;gap:8px;color:#2563eb;font:600 14.5px/1.25 'Inter',sans-serif}
+.ico{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;flex:none;background:#2563eb;color:#fff}
+.ico svg{display:block}
+.num{display:block;font:700 68px/.95 'Plus Jakarta Sans',sans-serif;letter-spacing:-.05em;color:#111;font-variant-numeric:tabular-nums}
+.wide .num{font-size:80px}
+.unit{font-size:.34em;letter-spacing:0;font-weight:600;color:#9ca3af;margin-left:3px}
+.cap{display:block;margin-top:8px;font-size:15px;line-height:1.4;color:#8b919a}
+.cap.lg{margin-top:0;font-size:22px;line-height:1.35;color:#111;font-weight:600;letter-spacing:-.02em;font-family:'Plus Jakarta Sans',sans-serif}
+.stop{color:#e11d48;font-weight:600}
+.warn{color:#d97706;font-weight:600}
+.chip{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:4px 10px;border-radius:999px;background:#eff4ff;color:#2563eb;font:600 12px 'Inter',sans-serif}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;margin-top:18px;padding:4px;border-radius:999px;background:#f3f4f6}
+.tab{border:0;background:none;border-radius:999px;padding:0 12px;min-height:32px;font:600 12.5px 'Inter',sans-serif;color:#6b7280;display:flex;gap:6px;align-items:center}
+.tab:hover{color:#111}
+.tab .n{font-size:11px;color:#9ca3af}
+.tab[aria-pressed="true"]{background:#2563eb;color:#fff}
+.tab[aria-pressed="true"] .n{color:rgba(255,255,255,.8)}
+.mix{display:flex;gap:3px;height:8px;width:100%;max-width:360px;margin-top:18px;border-radius:99px;overflow:hidden;background:#f3f4f6}
+.seg{min-width:2px;transition:flex-grow .4s ease}
+.mix-note{margin-top:10px;max-width:42ch;font-size:13px;line-height:1.45;color:#8b919a}
+.iconbtn{width:36px;height:36px;margin-left:8px;border:0;border-radius:999px;background:#f3f4f6;color:#111;display:inline-grid;place-items:center;vertical-align:middle}
+.iconbtn:hover{background:#e5e7eb}
+.group{margin-top:18px}
+.place{display:flex;align-items:center;gap:6px;margin:0 0 4px;font:700 11px 'Inter',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#9ca3af}
+.brief{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;color:#111}
+.brief-name{display:block;font:600 15px/1.3 'Plus Jakarta Sans',sans-serif;color:#111}
+.brief-meta{display:block;margin-top:2px;font-size:13px;color:#8b919a}
+.chev{color:#2563eb;flex:none}
+#exceptions{scroll-margin-top:12px}
+@media(max-width:1100px){
+  .band{grid-template-columns:1fr;gap:28px}
+  .copy{min-height:0}
+  .copy-foot{margin-top:8px;padding-top:8px}
+}
+@media(max-width:980px){
+  .search{display:none!important}
+  .vers{margin-left:auto}
+}
+@media(max-width:900px){.who{padding-right:4px!important}.who-name,.who-role{display:none}}
+@media(max-width:700px){
+  .page{padding:28px 16px 56px;gap:64px}
+  .display{font-size:36px}
+  .display.sm{font-size:30px}
+  .pair{grid-template-columns:1fr}
+  .num,.wide .num{font-size:56px}
+  .tabs{border-radius:16px}
+}
+@media(prefers-reduced-motion:reduce){.seg{transition:none}a.stat{transition:none}}
+</style>
+</head>
+<body>
+<div class="shell" style="font-family:'Inter',system-ui,sans-serif;color:#dce8f7">
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<aside class="side" aria-label="Main navigation">
+  <div class="logo">
+    <div class="logo-mark">MRG</div>
+    <div>
+      <div class="logo-name">Gateway</div>
+      <div class="logo-sub">Regulatory platform</div>
+    </div>
+  </div>
+  <nav class="nav">
+    <div class="navsec">Office</div>
+    <a href="/dashboard" class="on" aria-current="page">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Overview
+    </a>
+    <a href="/projects">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>Projects
+    </a>
+    <div class="navsec">Work</div>
+    <a href="/cases?scope=organisation">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>Cases
+    </a>
+    <a href="/clients?scope=organisation">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>Clients
+    </a>
+    <a href="/bd-scope">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>BD Scope
+    </a>
+    <a href="/pulse">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Daily Pulse
+    </a>
+    <a href="/reports">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>Reports
+    </a>
+    <div class="navsec">Account</div>
+    <a href="/profile">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>Profile
+    </a>
+  </nav>
+  <div style="margin-top:auto;padding-top:22px">
+    <button type="button" class="signout-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>Sign out
+    </button>
+  </div>
+</aside>
+
+<!-- ══════════ MAIN ══════════ -->
+<div class="col">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div style="flex:none">
+      <div class="topbar-kicker">Executive</div>
+      <h1 class="topbar-h1">Company overview</h1>
+    </div>
+    <label class="search" aria-label="Search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="search" placeholder="Search applications, MDMA, clients…" aria-label="Search by application number, MDMA number, client, or manufacturer">
+    </label>
+    <nav class="vers" aria-label="Overview version">
+      <a href="ceo-company-overview.html">V1</a>
+      <a href="v2.html">V2</a>
+      <a href="v3.html">V3</a>
+      <a href="v4.html" aria-current="page">V4</a>
+      <a href="v5.html">V5</a>
+      <a href="v6.html">V6</a>
+    </nav>
+    <button type="button" class="notif" aria-label="Notifications, 4 unread">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+      <span class="notif-badge">4</span>
+    </button>
+    <div class="who">
+      <span class="who-av">AH</span>
+      <div>
+        <div class="who-name">Amina Hassan</div>
+        <div class="who-role">CEO</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BODY -->
+  <main class="scroller">
+    <div class="page">
+
+      <section class="band" aria-label="Greeting and operating health">
+        <div class="copy">
+          <span class="badge"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Watch conditions</span>
+          <h2 class="display">Good afternoon, Amina</h2>
+          <p class="lede">Portfolio is active with <b>emerging exceptions</b> to monitor.</p>
+          <div class="actions">
+            <a class="go" href="/cases?scope=organisation">Case queue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+            <button type="button" class="iconbtn" aria-label="Refresh figures"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></button>
+          </div>
+          <div class="copy-foot">
+            <p class="quiet">Stable, not yet clear. The score starts at 100 and loses points for overdue work, queries, stale files, and register gaps.</p>
+          </div>
+        </div>
+        <div class="mosaic">
+          <a class="stat wide" href="#exceptions">
+            <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Operating health</span>
+            <span><span class="num">77<span class="unit">/100</span></span><span class="cap">Stable, not yet clear</span></span>
+          </a>
+          <div class="pair">
+            <a class="stat" href="/cases?tab=open&amp;scope=organisation">
+              <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Active cases</span>
+              <span><span class="num">210</span><span class="cap">67% of everything on record</span></span>
+            </a>
+            <a class="stat" href="/cases?tab=submitted&amp;scope=organisation">
+              <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>With the authority</span>
+              <span><span class="num">83</span><span class="cap">Submitted + query response</span></span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="band" aria-label="Organisation figures">
+        <div class="copy">
+          <h2 class="display sm">Organisation figures</h2>
+          <p class="lede">Customers, manufacturers, and the licences sitting on the book.</p>
+          <a class="go" href="/clients?scope=organisation">Client directory <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+          <div class="copy-foot">
+            <a class="proof" href="/clients?scope=organisation&amp;filter=unassigned">
+              <span class="proof-num">3</span>
+              <span class="proof-cap">Unassigned clients, with no account manager</span>
+            </a>
+          </div>
+        </div>
+        <div class="mosaic">
+          <a class="stat wide" href="/clients?scope=organisation">
+            <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Authorizations</span>
+            <span><span class="num">640</span><span class="cap">Active · 88 AR licences</span></span>
+          </a>
+          <div class="pair">
+            <a class="stat" href="/clients?scope=organisation">
+              <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Manufacturers</span>
+              <span><span class="num">118</span><span class="cap">On the customer book</span></span>
+            </a>
+            <a class="stat" href="/clients?scope=organisation">
+              <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Customers</span>
+              <span><span class="num">42</span><span class="cap">3 active divisions</span></span>
+            </a>
+          </div>
+          <div class="pair">
+            <a class="stat" href="/reports/monthly">
+              <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Closed this month</span>
+              <span><span class="num">14</span><span class="cap">Decisions recorded so far</span></span>
+            </a>
+            <a class="stat" href="/clients?scope=organisation">
+              <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Needs attention</span>
+              <span><span class="num">6</span><span class="cap"><span class="warn">Warn</span> · Licence ≤30 days or a query on file</span></span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="band" aria-label="Where the caseload sits">
+        <div class="copy">
+          <h2 class="display sm">Where the caseload sits</h2>
+          <span class="chip" id="divChip"><span class="dot"></span><span id="divChipLabel">All divisions</span></span>
+          <div class="tabs" role="group" aria-label="Filter by division">
+            <button type="button" class="tab" data-div="all" aria-pressed="true">All <span class="n">314</span></button>
+            <button type="button" class="tab" data-div="medical_devices" aria-pressed="false">Medical Devices <span class="n">120</span></button>
+            <button type="button" class="tab" data-div="pharma" aria-pressed="false">Pharma <span class="n">70</span></button>
+            <button type="button" class="tab" data-div="cosmetics" aria-pressed="false">Cosmetics <span class="n">20</span></button>
+          </div>
+          <div class="mix" aria-hidden="true">
+            <span class="seg" data-seg="0" style="flex-grow:115;background:#22d3ee"></span>
+            <span class="seg" data-seg="1" style="flex-grow:60;background:#60a5fa"></span>
+            <span class="seg" data-seg="2" style="flex-grow:35;background:#fbbf24"></span>
+            <span class="seg" data-seg="3" style="flex-grow:90;background:#34d399"></span>
+          </div>
+          <p class="mix-note"><span id="pipeTotal">300</span> files in these four stages. The All count above also includes rejected, cancelled and not-active files.</p>
+          <div class="copy-foot">
+            <a class="proof stage" data-stage="3" href="/cases?tab=closed&amp;scope=organisation">
+              <span class="proof-num cnt">90</span>
+              <span class="proof-cap">Approved · <span class="pct2">30</span>% of caseload</span>
+            </a>
+          </div>
+        </div>
+        <div class="mosaic">
+          <a class="stat wide stage" data-stage="0" href="/cases?tab=open&amp;scope=organisation">
+            <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>In preparation</span>
+            <span><span class="num cnt">115</span><span class="cap"><span class="pct2">38</span>% of caseload</span></span>
+          </a>
+          <div class="pair">
+            <a class="stat stage" data-stage="1" href="/cases?tab=submitted&amp;scope=organisation">
+              <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Submitted to authority</span>
+              <span><span class="num cnt">60</span><span class="cap"><span class="pct2">20</span>% of caseload</span></span>
+            </a>
+            <a class="stat stage" data-stage="2" href="/cases?tab=query_response&amp;scope=organisation">
+              <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Authority query response</span>
+              <span><span class="num cnt">35</span><span class="cap"><span class="pct2">12</span>% of caseload</span></span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="band" id="exceptions" aria-label="Risk and exception book">
+        <div class="copy">
+          <h2 class="display sm">Risk &amp; exception book</h2>
+          <p class="lede">Exception figures leadership reviews before opening the queue.</p>
+          <a class="go" href="/reports/ceo">CEO monitoring <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+          <div class="copy-foot">
+            <ul class="rates">
+              <li><span>Overdue tasks</span><b>−11.0</b></li>
+              <li><span>Query response</span><b>−8.3</b></li>
+              <li><span>Stale applications</span><b>−1.7</b></li>
+              <li><span>GHAD divergences</span><b>−2.0</b></li>
+            </ul>
+            <p class="quiet" style="margin-top:12px">100 − 23 leaves the score at 77.</p>
+          </div>
+        </div>
+        <div class="mosaic">
+          <a class="stat wide" href="/reports/monthly">
+            <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Outstanding invoices</span>
+            <span><span class="num">7</span><span class="cap"><span class="stop">Stop</span> · At least one invoice is overdue</span></span>
+          </a>
+          <div class="pair">
+            <a class="stat" href="/cases?tab=query_response&amp;scope=organisation">
+              <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Query response</span>
+              <span><span class="num">35</span><span class="cap"><span class="warn">Warn</span> · Waiting on our reply</span></span>
+            </a>
+            <a class="stat" href="/reports/ceo">
+              <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Overdue tasks</span>
+              <span><span class="num">11</span><span class="cap"><span class="warn">Warn</span> · Past their due date</span></span>
+            </a>
+          </div>
+          <div class="pair">
+            <a class="stat" href="/reports/ceo">
+              <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Stale applications</span>
+              <span><span class="num">9</span><span class="cap"><span class="warn">Warn</span> · No recent movement</span></span>
+            </a>
+            <a class="stat" href="/clients">
+              <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Licences in 30 days</span>
+              <span><span class="num">4</span><span class="cap"><span class="warn">Warn</span> · Renewals inside the window</span></span>
+            </a>
+          </div>
+          <a class="stat" href="/ghad-reconciliation">
+            <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>GHAD divergences</span>
+            <span><span class="num">2</span><span class="cap"><span class="warn">Warn</span> · Records that do not match the register</span></span>
+          </a>
+        </div>
+      </section>
+
+      <section class="band" aria-label="Active briefs and reports">
+        <div class="copy">
+          <h2 class="display sm">Active briefs</h2>
+          <p class="lede">Grouped by the country each brief belongs to.</p>
+          <a class="go" href="/projects">All projects <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+          <div class="group">
+            <p class="place"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Syria</p>
+            <a class="brief" href="/projects/dcc-introduction"><span><span class="brief-name">Damascus Certification Center</span><span class="brief-meta">Ministry of Health · DCC</span></span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+          </div>
+          <div class="group">
+            <p class="place"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>KSA</p>
+            <a class="brief" href="/projects/moh-violations"><span><span class="brief-name">Directorate of Violations</span><span class="brief-meta">Ministry of Health · Al Bidayah</span></span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+            <a class="brief" href="/projects/moh-inspection"><span><span class="brief-name">Directorate of Inspection</span><span class="brief-meta">Ministry of Health · Al Bidayah</span></span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+          </div>
+          <div class="group">
+            <p class="place"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Middle East</p>
+            <a class="brief" href="/projects/manara-raps"><span><span class="brief-name">Manara</span><span class="brief-meta">MRG · RAPS</span></span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>            </a>
+          </div>
+        </div>
+        <div class="mosaic">
+          <a class="stat wide" href="/reports/ceo">
+            <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>CEO monitoring</span>
+            <span class="cap lg">Queries and exceptions</span>
+          </a>
+          <div class="pair">
+            <a class="stat" href="/reports/monthly">
+              <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Monthly snapshot</span>
+              <span class="cap lg">Throughput and closures</span>
+            </a>
+            <a class="stat" href="/cases?scope=organisation">
+              <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Case queue</span>
+              <span class="cap lg">Cases across all clients</span>
+            </a>
+          </div>
+          <a class="stat" href="/clients?scope=organisation">
+            <span class="krow"><span class="ico" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></span>Client directory</span>
+            <span class="cap lg">All relationships</span>
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+</div>
+
+<script>
+(function () {
+  var DIVS = {
+    all: { name: 'All divisions', c: '#2563eb', dep: '' },
+    medical_devices: { name: 'Medical Devices', c: '#0284c7', dep: 'medical_devices' },
+    pharma: { name: 'Pharma', c: '#d97706', dep: 'pharma' },
+    cosmetics: { name: 'Cosmetics', c: '#7c3aed', dep: 'cosmetics' }
+  };
+  var PIPE = { all: [115, 60, 35, 90], medical_devices: [64, 36, 20, 48], pharma: [38, 18, 14, 30], cosmetics: [13, 6, 1, 12] };
+  var TABS = ['open', 'submitted', 'query_response', 'closed'];
+
+  function colours(arr) { return ['#22d3ee', '#60a5fa', arr[2] > 0 ? '#fbbf24' : '#22d3ee', '#34d399']; }
+
+  function render(key) {
+    var d = DIVS[key], arr = PIPE[key], total = arr.reduce(function (a, b) { return a + b; }, 0), c = colours(arr);
+    document.querySelectorAll('.tab').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.div === key)); });
+    var chip = document.getElementById('divChip');
+    chip.style.background = d.c + '1e';
+    chip.style.color = d.c;
+    document.getElementById('divChipLabel').textContent = d.name;
+    document.getElementById('pipeTotal').textContent = total;
+    document.querySelectorAll('.seg').forEach(function (s) {
+      var i = +s.dataset.seg;
+      s.style.flexGrow = Math.max(arr[i], 0.01);
+      s.style.background = c[i];
+    });
+    document.querySelectorAll('.stage').forEach(function (el) {
+      var i = +el.dataset.stage, n = arr[i], share = total ? Math.round(n / total * 100) : 0;
+      el.querySelector('.cnt').textContent = n;
+      el.querySelector('.pct2').textContent = share;
+      el.setAttribute('href', '/cases?tab=' + TABS[i] + '&scope=organisation' + (d.dep ? '&department=' + d.dep : ''));
+    });
+  }
+
+  document.querySelectorAll('.tab').forEach(function (b) {
+    b.addEventListener('click', function () { render(b.dataset.div); });
+  });
+  render('all');
+})();
+</script>
+</body>
+</html>

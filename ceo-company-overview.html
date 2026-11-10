@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Company overview · MRG Gateway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:#0a1222;overflow:hidden}
+a{color:#7cb4ff;text-decoration:none}a:hover{color:#bcd7ff}
+button{font:inherit}
+:focus-visible{outline:2px solid #7cb4ff;outline-offset:2px}
+.nav a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:14px;font-weight:500;color:#dbe6f7;margin-bottom:2px}
+.nav a:hover{background:rgba(255,255,255,.05);color:#fff}
+.nav a.on{background:rgba(255,255,255,.08);color:#fff;font-weight:600}
+.navsec{font:700 10.5px 'Inter',sans-serif;letter-spacing:.14em;color:#8ea2c6;text-transform:uppercase;padding:16px 8px 8px}
+
+/* shell: sidebar and header stay put; only the body scrolls */
+.shell{display:flex;flex-wrap:nowrap;align-items:stretch;height:100vh;height:100dvh;overflow:hidden}
+.side{flex:0 0 268px;width:268px;height:100vh;height:100dvh;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#2a3a5c transparent}
+.side::-webkit-scrollbar{width:8px}
+.side::-webkit-scrollbar-thumb{background:#2a3a5c;border-radius:8px}
+.col{flex:1 1 auto;width:calc(100% - 268px);height:100vh;height:100dvh;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.topbar{flex:0 0 auto;position:sticky;top:0;z-index:20}
+.scroller{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#2a3a5c transparent}
+.scroller::-webkit-scrollbar{width:10px}
+.scroller::-webkit-scrollbar-thumb{background:#2a3a5c;border-radius:10px;border:3px solid #0a1222}
+.vers{display:inline-flex;flex:none;align-items:center;gap:2px;padding:3px;border-radius:999px;background:#0c1427;border:1px solid #1c2842}
+.vers a{display:inline-flex;align-items:center;min-height:32px;padding:0 12px;border-radius:999px;font:600 12px 'Inter',sans-serif;letter-spacing:.04em;color:#a3b1c6}
+.vers a:hover{color:#fff}
+.vers a[aria-current="page"]{background:#2563eb;color:#fff}
+
+/* bento language */
+.bento{display:grid;gap:10px;padding:10px;border-radius:30px;background:#0d1629;border:1px solid #18233b}
+.bc{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:18px;padding:22px;min-width:0;
+  background:#111a2e;border:1px solid #1c2842;border-radius:22px;box-shadow:0 1px 0 rgba(255,255,255,.035) inset;color:#e6edf7}
+a.bc{transition:border-color .15s,background .15s}
+a.bc:hover{background:#132039;color:#e6edf7}
+.inner{background:#0c1427;border-radius:16px}
+/* accent card: solid blue with concentric arc lines (after the reference card) */
+.arcs{overflow:hidden;border-color:#2563eb!important;
+  background:
+    repeating-radial-gradient(circle at 100% 100%, transparent 0 90px, rgba(255,255,255,.12) 90px 91px),
+    #2563eb!important;
+  box-shadow:none!important}
+.arcs .pill:hover{background:#e6edf7!important;color:#0b1a38}
+/* greeting: the only light card in the dark bento */
+.hello{position:relative;overflow:hidden;display:flex;flex-direction:column;min-width:0;padding:0;border:0;border-radius:28px;color:#0b1a38;
+  background:
+    radial-gradient(circle at 128% 132%, rgba(37,99,235,.22) 0%, rgba(147,197,253,.1) 24%, transparent 52%),
+    linear-gradient(165deg,#ffffff 0%,#f7f9fd 58%,#e7eefb 100%);
+  box-shadow:0 22px 44px -28px rgba(2,6,23,.72)}
+.hello::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-radial-gradient(
+    circle at 112% 118%,
+    transparent 0 52px,
+    rgba(96,165,250,.14) 60px,
+    rgba(29,78,216,.5) 64px,
+    rgba(191,219,254,.24) 70px,
+    transparent 78px);
+  -webkit-mask-image:linear-gradient(to top left, #000 0% 24%, rgba(0,0,0,.55) 46%, transparent 68%);
+  mask-image:linear-gradient(to top left, #000 0% 24%, rgba(0,0,0,.55) 46%, transparent 68%)}
+.hello-body{position:relative;z-index:1;display:flex;flex-direction:column;gap:18px;flex:1;padding:24px 24px 20px}
+.hello-mark{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:#1d4ed8;color:#fff;box-shadow:0 12px 24px -14px rgba(29,78,216,.9)}
+.hello-kicker{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#1d4ed8}
+.hello-title{margin:12px 0 0;font:800 32px/1.12 'Plus Jakarta Sans',sans-serif;color:#0b1a38;letter-spacing:-.03em}
+.hello-copy{margin:10px 0 0;font-size:14.5px;line-height:1.6;color:#475569}
+.hello-chip{align-self:flex-start;margin-top:auto;background:rgba(245,158,11,.16);color:#b45309}
+.hello-chip i{width:6px;height:6px;border-radius:50%;background:#d97706}
+.hello-bar{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-top:1px solid rgba(15,23,42,.08)}
+.hello .hello-queue{background:#0b1a38;border-color:#0b1a38;color:#fff}
+.hello .hello-queue:hover{background:#1d4ed8;color:#fff}
+.hello-refresh{width:44px;height:44px;border-radius:999px;border:1px solid rgba(15,23,42,.12);background:#fff;color:#0b1a38;display:grid;place-items:center;cursor:pointer}
+.hello-refresh:hover{color:#1d4ed8}
+/* operating health: soft blue light across the top, like a diffused lamp */
+.prem{overflow:hidden}
+.prem::before{content:"";position:absolute;left:0;right:0;top:0;height:58%;pointer-events:none;
+  background:linear-gradient(180deg,#3b82f6 0%,#2563eb 26%,#1e3a8a 58%,transparent 100%)}
+.prem::after{content:"";position:absolute;left:0;right:0;top:-18%;height:52%;pointer-events:none;
+  background:radial-gradient(ellipse 72% 70% at 50% 18%,rgba(255,255,255,.55) 0%,rgba(191,219,254,.22) 32%,transparent 68%);
+  filter:blur(12px)}
+.prem>*{position:relative;z-index:1}
+a.bc.prem:hover{background:#111a2e}
+.h2{margin:0;font:700 22px 'Plus Jakarta Sans','Inter',sans-serif;color:#f5f8fc;letter-spacing:-.02em}
+.h2s{margin:4px 0 0;font-size:13.5px;color:#94a3b8}
+.cl{display:block;font:600 16px 'Plus Jakarta Sans','Inter',sans-serif;color:#f5f8fc;letter-spacing:-.01em}
+.cc{display:block;margin-top:4px;font-size:13px;line-height:1.45;color:#94a3b8}
+.fig{display:block;font:800 46px/0.95 'Plus Jakarta Sans','Inter',sans-serif;color:#f5f8fc;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.huge{display:block;font:800 104px/0.88 'Plus Jakarta Sans','Inter',sans-serif;color:#f5f8fc;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.go{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:600;color:#7cb4ff;white-space:nowrap}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.tile{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;flex:none}
+.pill{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px;border-radius:999px;background:#0c1427;border:1px solid #1c2842;color:#e6edf7;font-size:13px;font-weight:600;white-space:nowrap}
+.pill:hover{color:#fff}
+.tab{border:0;background:none;border-radius:999px;padding:0 14px;min-height:36px;cursor:pointer;font:600 12.5px 'Inter',sans-serif;color:#a3b1c6;display:flex;gap:7px;align-items:center;white-space:nowrap}
+.tab:hover{color:#f5f8fc}
+.tab .n{font-size:12px;color:#8b9ab0}
+.tab[aria-pressed="true"]{background:#2563eb;color:#fff}
+.tab[aria-pressed="true"] .n{color:rgba(255,255,255,.8)}
+.tk{display:inline-flex;white-space:nowrap;animation:tk 50s linear infinite}
+@keyframes tk{to{transform:translateX(-50%)}}
+.live{width:7px;height:7px;border-radius:50%;background:#22d3ee;flex:none;animation:pulse 1.8s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,211,238,.6)}80%,100%{box-shadow:0 0 0 7px rgba(34,211,238,0)}}
+.shead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px;padding:0 6px}
+.badge{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;font-size:11.5px;font-weight:700;color:#0a1222}
+.seg{min-width:2px;transition:flex-grow .4s ease}
+.meter{display:block;height:100%;border-radius:3px;transition:width .4s ease}
+.gauge{display:block;width:100%;height:auto;margin-top:12px}
+.gauge .on{fill:#fbbf24}
+.gauge .off{fill:#3d4c63}
+.stage{
+  --light:color-mix(in srgb,var(--go) 55%,transparent);
+  --light-x:55%;--light-y:-10%;
+  --edge:color-mix(in srgb,var(--go) 32%,transparent);
+  --grain:.16;--card-bg:#0b1430;
+  overflow:hidden;isolation:isolate;background:var(--card-bg);
+  box-shadow:inset 0 1px 0 var(--edge)}
+.stage::before{content:"";position:absolute;z-index:-2;width:130%;height:130%;left:calc(var(--light-x) - 65%);top:calc(var(--light-y) - 50%);
+  background:radial-gradient(closest-side,var(--light),transparent);filter:blur(20px);pointer-events:none}
+.stage::after{content:"";position:absolute;inset:0;z-index:-1;opacity:var(--grain);mix-blend-mode:overlay;pointer-events:none;border-radius:inherit;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+a.bc.stage:hover{background:var(--card-bg)}
+.stage>span:not(.stage-go){position:relative;z-index:1}
+.stage-go{position:absolute;top:12px;right:12px;z-index:2;width:40px;height:40px;border-radius:22px;
+  display:grid;place-items:center;color:#fff;background:var(--go);border:0}
+
+
+/* panel grids */
+.b1{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:"welcome active active health" "welcome witha closed health" "cust manu auth attn"}
+.b2{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:"chead chead chead chead" "s1 s2 s3 s4"}
+.b3{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:"inv qr qr comp" "inv over stale comp" "lic lic ghad comp"}
+.b4{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:"briefs briefs rhead rhead" "briefs briefs r1 r2" "briefs briefs r3 r4"}
+
+@media (max-width:1240px){
+  .b1{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"welcome health" "active active" "witha closed" "cust manu" "auth attn"}
+  .b2{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"chead chead" "s1 s2" "s3 s4"}
+  .b3{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"inv qr" "inv over" "stale lic" "ghad ghad" "comp comp"}
+  .b4{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"briefs briefs" "rhead rhead" "r1 r2" "r3 r4"}
+  .oneline{flex-wrap:wrap!important}
+  .tabs{flex:1 1 100%!important;flex-wrap:wrap!important;max-width:100%}
+}
+@media (max-width:980px){.search{display:none!important}.vers{margin-left:auto}}
+@media (max-width:900px){.who{padding-right:4px!important}.who-name{display:none}}
+@media (max-width:700px){
+  .b1{grid-template-columns:minmax(0,1fr);grid-template-areas:"welcome" "health" "active" "witha" "closed" "cust" "manu" "auth" "attn"}
+  .b2{grid-template-columns:minmax(0,1fr);grid-template-areas:"chead" "s1" "s2" "s3" "s4"}
+  .b3{grid-template-columns:minmax(0,1fr);grid-template-areas:"inv" "qr" "over" "stale" "lic" "ghad" "comp"}
+  .b4{grid-template-columns:minmax(0,1fr);grid-template-areas:"briefs" "rhead" "r1" "r2" "r3" "r4"}
+  .huge{font-size:76px}
+  .tabs{flex-wrap:wrap!important}
+}
+@media (prefers-reduced-motion:reduce){.tk,.live{animation:none}.seg,.meter{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="shell" style="background: #0a1222; font-family: 'Inter', system-ui, sans-serif; color: #e6edf7;">
+
+  <!-- ═════════ SIDEBAR ═════════ -->
+  <aside class="side" aria-label="Main navigation" style="padding: 18px 16px 20px; display: flex; flex-direction: column; background: linear-gradient(180deg, #0a1530 0%, #0b234d 52%, #0d3473 100%); border-right: 1px solid rgba(148,197,255,.08);">
+    <div style="display: flex; gap: 12px; align-items: center; padding: 4px 8px 14px;">
+      <div style="width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(145deg, #1f3b70, #0b1a38); border: 1px solid rgba(255,255,255,.2); font: 800 11px 'Plus Jakarta Sans', sans-serif; color: #fff;">MRG</div>
+      <div>
+        <div style="font: 700 15px 'Plus Jakarta Sans', sans-serif; color: #fff;">Gateway</div>
+        <div style="font-size: 11.5px; color: #a9bbdb;">Regulatory platform</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="navsec">Office</div>
+      <a href="/dashboard" class="on" aria-current="page"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Overview</a>
+      <a href="/projects"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>Projects</a>
+      <div class="navsec">Work</div>
+      <a href="/cases?scope=organisation"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>Cases</a>
+      <a href="/clients?scope=organisation"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>Clients</a>
+      <a href="/bd-scope"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>BD Scope</a>
+      <a href="/pulse"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Daily Pulse</a>
+      <a href="/reports"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>Reports</a>
+      <div class="navsec">Account</div>
+      <a href="/profile"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>Profile</a>
+    </nav>
+    <div style="margin-top: auto; padding-top: 24px;">
+      <button type="button" style="width: 100%; min-height: 44px; display: flex; justify-content: center; align-items: center; gap: 8px; border-radius: 10px; border: 1px solid rgba(148,197,255,.2); background: rgba(2,6,23,.25); color: #e5edf9; font: 600 13px 'Inter', sans-serif; cursor: pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>Sign out</button>
+    </div>
+  </aside>
+
+  <!-- ═════════ MAIN COLUMN ═════════ -->
+  <div class="col">
+
+    <!-- TOP BAR -->
+    <header class="topbar" style="min-height: 72px; display: flex; flex-wrap: nowrap; align-items: center; gap: 14px; padding: 12px 24px; background: #050c1c; border-bottom: 1px solid rgba(148,197,255,.08);">
+      <div style="flex: none;">
+        <div style="font: 700 10px 'Inter', sans-serif; letter-spacing: .2em; color: #8fa3c7; text-transform: uppercase;">Executive</div>
+        <h1 style="margin: 3px 0 0; font: 700 17px 'Plus Jakarta Sans', sans-serif; color: #fff; letter-spacing: -.02em;">Company overview</h1>
+      </div>
+      <label class="search" style="margin-left: auto; flex: 0 1 560px; min-width: 0; display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(148,197,255,.18); background: rgba(255,255,255,.02); color: #8fa3c7;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" placeholder="Search applications, MDMA, clients…" aria-label="Search by application number, MDMA number, client, or manufacturer" style="flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #fff; font: 400 13.5px 'Inter', sans-serif;">
+      </label>
+      <nav class="vers" aria-label="Overview version">
+        <a href="ceo-company-overview.html" aria-current="page">V1</a>
+        <a href="v2.html">V2</a>
+        <a href="v3.html">V3</a>
+        <a href="v4.html">V4</a>
+        <a href="v5.html">V5</a>
+        <a href="v6.html">V6</a>
+      </nav>
+      <button type="button" aria-label="Notifications, 4 unread" style="position: relative; width: 44px; height: 44px; border-radius: 50%; background: #fff; color: #0b1a38; border: 0; display: grid; place-items: center; cursor: pointer; flex: none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        <span style="position: absolute; top: -2px; right: -2px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #e11d48; color: #fff; font: 700 10px 'Inter', sans-serif; display: grid; place-items: center; border: 2px solid #050c1c;">4</span>
+      </button>
+      <div class="who" style="display: flex; flex: none; align-items: center; gap: 10px; padding: 4px 16px 4px 4px; border-radius: 999px; border: 1px solid rgba(148,197,255,.16); background: rgba(255,255,255,.03);">
+        <span style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #1e40af); color: #fff; font: 700 11px 'Inter', sans-serif; display: grid; place-items: center;">AH</span>
+        <div class="who-name">
+          <div style="font: 700 13px 'Plus Jakarta Sans', sans-serif; color: #fff;">Amina Hassan</div>
+          <div style="font-size: 11px; color: #8fa3c7;">CEO</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ═════════ BODY — the only scrolling area ═════════ -->
+    <main class="scroller" style="background: #0a1222;">
+      <div style="max-width: 1320px; margin: 0 auto; padding: 24px 28px 56px; display: flex; flex-direction: column; gap: 32px;">
+
+        <!-- ════ 1 · ORGANISATION AT A GLANCE ════ -->
+        <section class="bento b1" aria-label="Organisation at a glance">
+
+          <!-- welcome (tall, light — unlike the dark metric cards) -->
+          <div class="hello" style="grid-area: welcome;">
+            <div class="hello-body">
+              <span class="hello-mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></span>
+              <div>
+                <span class="hello-kicker">Core interface · organisation</span>
+                <h2 class="hello-title">Good afternoon, Amina</h2>
+                <p class="hello-copy">Portfolio is active with emerging exceptions to monitor.</p>
+              </div>
+              <span class="chip hello-chip"><i></i>Watch conditions</span>
+            </div>
+            <div class="hello-bar">
+              <a href="/cases?scope=organisation" class="pill hello-queue"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/><path d="M8 10v4"/><path d="M12 10v2"/><path d="M16 10v6"/></svg>Case queue</a>
+              <button type="button" class="hello-refresh" aria-label="Refresh figures"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></button>
+            </div>
+          </div>
+
+          <!-- active cases (big) -->
+          <a href="/cases?tab=open&amp;scope=organisation" class="bc" style="grid-area: active; min-height: 250px;">
+            <span class="top"><span><span class="cl" style="font-size: 18px;">Active cases</span><span class="cc">67% of everything on record</span></span><span class="go">Open queue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></span>
+            <span class="huge">210</span>
+            <span style="display: flex; align-items: center; gap: 14px;">
+              <span style="flex: 1; height: 8px; border-radius: 4px; background: #1c2842; overflow: hidden;"><span style="display: block; width: 67%; height: 100%; border-radius: 4px; background: #2563eb;"></span></span>
+              <span style="font-size: 12.5px; color: #94a3b8; white-space: nowrap;">210 of 314 on record</span>
+            </span>
+          </a>
+
+          <!-- health (tall) -->
+          <a href="#composition" class="bc prem" style="grid-area: health;">
+            <span>
+              <span style="display: flex; align-items: flex-end; gap: 6px;"><span class="huge">77</span><span style="font: 700 22px 'Plus Jakarta Sans', sans-serif; color: #8b9ab0; margin-bottom: 6px;">/100</span></span>
+              <svg class="gauge" viewBox="0 0 240 140" role="img" aria-label="Operating health 77 out of 100. Watch conditions.">
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(32.2 117.7) rotate(-85.9)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(34.0 105.3) rotate(-77.7)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(37.5 93.2) rotate(-69.5)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(42.8 81.8) rotate(-61.4)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(49.6 71.3) rotate(-53.2)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(57.8 61.8) rotate(-45.0)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(67.3 53.6) rotate(-36.8)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(77.8 46.8) rotate(-28.6)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(89.2 41.5) rotate(-20.5)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(101.3 38.0) rotate(-12.3)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(113.7 36.2) rotate(-4.1)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(126.3 36.2) rotate(4.1)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(138.7 38.0) rotate(12.3)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(150.8 41.5) rotate(20.5)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(162.2 46.8) rotate(28.6)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(172.7 53.6) rotate(36.8)"/>
+                <rect class="on" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(182.2 61.8) rotate(45.0)"/>
+                <rect class="off" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(190.4 71.3) rotate(53.2)"/>
+                <rect class="off" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(197.2 81.8) rotate(61.4)"/>
+                <rect class="off" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(202.5 93.2) rotate(69.5)"/>
+                <rect class="off" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(206.0 105.3) rotate(77.7)"/>
+                <rect class="off" x="-5.5" y="-16" width="11" height="32" rx="5.5" transform="translate(207.8 117.7) rotate(85.9)"/>
+              </svg>
+            </span>
+            <span>
+              <span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;"><span class="cl" style="font-size: 18px;">Operating health</span><span class="chip" style="background: rgba(245,158,11,.14); color: #fbbf24;">Watch conditions</span></span>
+              <span class="cc" style="font-size: 14px; margin-top: 8px;">Stable, not yet clear</span>
+              <span class="go" style="margin-top: 12px;">Score composition</span>
+            </span>
+          </a>
+
+          <!-- with the authority -->
+          <a href="/cases?tab=submitted&amp;scope=organisation" class="bc" style="grid-area: witha;">
+            <span class="fig">83</span>
+            <span><span class="cl">With the authority</span><span class="cc">Submitted + query response</span></span>
+          </a>
+
+          <!-- closed this month -->
+          <a href="/reports/monthly" class="bc" style="grid-area: closed;">
+            <span class="top"><span class="fig">14</span><span class="chip" style="background: rgba(16,185,129,.14); color: #34d399;">This month</span></span>
+            <span><span class="cl">Closed this month</span><span class="cc">Decisions recorded so far</span></span>
+          </a>
+
+          <!-- customers -->
+          <a href="/clients?scope=organisation" class="bc" style="grid-area: cust;">
+            <span class="top"><span class="fig">42</span>
+              <span aria-hidden="true" style="display: flex;">
+                <span style="width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: #0c1427; border: 2px solid #22d3ee; color: #22d3ee; font-size: 9.5px; font-weight: 700;">MD</span>
+                <span style="width: 30px; height: 30px; margin-left: -8px; border-radius: 50%; display: grid; place-items: center; background: #0c1427; border: 2px solid #fbbf24; color: #fbbf24; font-size: 9.5px; font-weight: 700;">PH</span>
+                <span style="width: 30px; height: 30px; margin-left: -8px; border-radius: 50%; display: grid; place-items: center; background: #0c1427; border: 2px solid #c084fc; color: #c084fc; font-size: 9.5px; font-weight: 700;">CO</span>
+              </span>
+            </span>
+            <span><span class="cl">Customers</span><span class="cc">3 active divisions</span></span>
+          </a>
+
+          <!-- manufacturers -->
+          <a href="/clients?scope=organisation" class="bc" style="grid-area: manu;" aria-label="Manufacturers, 118, on the customer book">
+            <span class="fig">118</span>
+            <span><span class="cl">Manufacturers</span><span class="cc">On the customer book</span></span>
+          </a>
+
+          <!-- authorizations -->
+          <a href="/clients?scope=organisation" class="bc" style="grid-area: auth;">
+            <span class="top"><span class="fig">640</span><span class="chip" style="background: #0c1427; color: #a3b1c6;">88 AR</span></span>
+            <span><span class="cl">Authorizations</span><span class="cc">Active authorizations · 88 AR licences</span></span>
+          </a>
+
+          <!-- needs attention + unassigned -->
+          <div class="bc" style="grid-area: attn; border-color: rgba(245,158,11,.35); background: linear-gradient(180deg, rgba(245,158,11,.07), transparent 60%), #111a2e;">
+            <span style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+              <a href="/clients?scope=organisation" style="color: inherit;"><span class="fig" style="color: #fbbf24;">6</span><span class="cl" style="margin-top: 14px; font-size: 14px;">Needs attention</span><span class="cc" style="font-size: 12px;">Licence ≤30 days or a query on file</span></a>
+              <a href="/clients?scope=organisation&amp;filter=unassigned" style="color: inherit;"><span class="fig" style="color: #fbbf24;">3</span><span class="cl" style="margin-top: 14px; font-size: 14px;">Unassigned clients</span><span class="cc" style="font-size: 12px;">No account manager</span></a>
+            </span>
+          </div>
+        </section>
+
+        <!-- ════ 2 · WHERE THE CASELOAD SITS ════ -->
+        <section class="bento b2" aria-label="Where the caseload sits">
+          <div class="bc" style="grid-area: chead; gap: 16px;">
+            <div class="oneline" style="display: flex; flex-wrap: nowrap; justify-content: space-between; align-items: center; gap: 16px;">
+              <span style="display: flex; align-items: center; gap: 12px; min-width: 0;">
+                <h2 class="h2" style="white-space: nowrap;">Where the caseload sits</h2>
+                <span class="chip" id="divChip" style="background: #67e8f91f; color: #67e8f9; text-transform: uppercase; letter-spacing: .08em; font-size: 11px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span><span id="divChipLabel">All divisions</span></span>
+              </span>
+              <div class="tabs" role="group" aria-label="Filter by division" style="display: flex; flex-wrap: nowrap; flex: none; gap: 4px; padding: 4px; border-radius: 999px; background: #0c1427;">
+                <button type="button" class="tab" data-div="all" aria-pressed="true">All <span class="n">314</span></button>
+                <button type="button" class="tab" data-div="medical_devices" aria-pressed="false">Medical Devices <span class="n">120</span></button>
+                <button type="button" class="tab" data-div="pharma" aria-pressed="false">Pharma <span class="n">70</span></button>
+                <button type="button" class="tab" data-div="cosmetics" aria-pressed="false">Cosmetics <span class="n">20</span></button>
+              </div>
+            </div>
+            <div aria-hidden="true" style="display: flex; gap: 4px; height: 12px; border-radius: 6px; overflow: hidden;">
+              <span class="seg" data-seg="0" style="flex-grow: 115; background: #22d3ee;"></span>
+              <span class="seg" data-seg="1" style="flex-grow: 60; background: #60a5fa;"></span>
+              <span class="seg" data-seg="2" style="flex-grow: 35; background: #fbbf24;"></span>
+              <span class="seg" data-seg="3" style="flex-grow: 90; background: #34d399;"></span>
+            </div>
+            <p class="h2s" style="margin: -4px 0 0;"><span id="pipeTotal">300</span> files in these four stages. The All count above also includes rejected, cancelled and not-active files.</p>
+          </div>
+
+          <a href="/cases?tab=open&amp;scope=organisation" class="bc stage" data-stage="0" style="--go: #22d3ee; grid-area: s1;">
+            <span class="stage-go" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+            <span class="fig cnt" style="font-size: 56px;">115</span>
+            <span>
+              <span class="cl" style="font-size: 15px;">In preparation</span>
+              <span style="display: block; height: 6px; margin: 12px 0 10px; border-radius: 3px; background: #1c2842; overflow: hidden;"><span class="meter" style="width: 38%; background: #22d3ee;"></span></span>
+              <span style="font-size: 12.5px; color: #94a3b8;"><span class="pct2">38</span>% of caseload</span>
+            </span>
+          </a>
+          <a href="/cases?tab=submitted&amp;scope=organisation" class="bc stage" data-stage="1" style="--go: #60a5fa; grid-area: s2;">
+            <span class="stage-go" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+            <span class="fig cnt" style="font-size: 56px;">60</span>
+            <span>
+              <span class="cl" style="font-size: 15px;">Submitted to authority</span>
+              <span style="display: block; height: 6px; margin: 12px 0 10px; border-radius: 3px; background: #1c2842; overflow: hidden;"><span class="meter" style="width: 20%; background: #60a5fa;"></span></span>
+              <span style="font-size: 12.5px; color: #94a3b8;"><span class="pct2">20</span>% of caseload</span>
+            </span>
+          </a>
+          <a href="/cases?tab=query_response&amp;scope=organisation" class="bc stage" data-stage="2" style="--go: #fbbf24; grid-area: s3;">
+            <span class="stage-go" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+            <span class="fig cnt" style="font-size: 56px;">35</span>
+            <span>
+              <span class="cl" style="font-size: 15px;">Authority query response</span>
+              <span style="display: block; height: 6px; margin: 12px 0 10px; border-radius: 3px; background: #1c2842; overflow: hidden;"><span class="meter" style="width: 12%; background: #fbbf24;"></span></span>
+              <span style="font-size: 12.5px; color: #94a3b8;"><span class="pct2">12</span>% of caseload</span>
+            </span>
+          </a>
+          <a href="/cases?tab=closed&amp;scope=organisation" class="bc stage" data-stage="3" style="--go: #34d399; grid-area: s4;">
+            <span class="stage-go" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+            <span class="fig cnt" style="font-size: 56px;">90</span>
+            <span>
+              <span class="cl" style="font-size: 15px;">Approved (all time in view)</span>
+              <span style="display: block; height: 6px; margin: 12px 0 10px; border-radius: 3px; background: #1c2842; overflow: hidden;"><span class="meter" style="width: 30%; background: #34d399;"></span></span>
+              <span style="font-size: 12.5px; color: #94a3b8;"><span class="pct2">30</span>% of caseload</span>
+            </span>
+          </a>
+        </section>
+
+        <!-- ════ 3 · RISK & EXCEPTION BOOK ════ -->
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div class="shead">
+            <div><h2 class="h2">Risk &amp; exception book</h2><p class="h2s">Exception figures leadership reviews before opening the queue</p></div>
+            <a href="/reports/ceo" style="font-size: 13.5px; font-weight: 600; min-height: 44px; display: inline-flex; align-items: center;">CEO monitoring</a>
+          </div>
+          <section class="bento b3" aria-label="Risk and exception book">
+
+            <a href="/reports/monthly" class="bc" style="grid-area: inv; border-color: rgba(244,63,94,.4); background: linear-gradient(180deg, rgba(244,63,94,.1), transparent 55%), #111a2e;">
+              <span class="top"><span class="chip" style="background: rgba(244,63,94,.16); color: #fb7185;">Stop</span><span class="go" style="color: #fb7185;">Open queue <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></span>
+              <span class="huge" style="color: #fb7185;">7</span>
+              <span><span class="cl" style="font-size: 18px;">Outstanding invoices</span><span class="cc">At least one invoice is overdue</span></span>
+            </a>
+
+            <a href="/cases?tab=query_response&amp;scope=organisation" class="bc" style="grid-area: qr; flex-direction: row; align-items: stretch;">
+              <span style="display: flex; flex-direction: column; justify-content: space-between; gap: 14px; flex: 1;">
+                <span class="chip" style="align-self: flex-start; background: rgba(245,158,11,.14); color: #fbbf24;">Warn</span>
+                <span><span class="cl" style="font-size: 18px;">Query response</span><span class="cc">Cases waiting on our reply to the authority</span></span>
+              </span>
+              <span style="display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; gap: 14px;">
+                <span class="go">Open queue <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+                <span class="huge" style="font-size: 88px; color: #fbbf24;">35</span>
+              </span>
+            </a>
+
+            <a href="/reports/ceo" class="bc" style="grid-area: over;">
+              <span class="top"><span class="fig" style="color: #fbbf24;">11</span><span class="chip" style="background: rgba(245,158,11,.14); color: #fbbf24;">Warn</span></span>
+              <span><span class="cl">Overdue tasks</span><span class="go" style="margin-top: 6px;">Open queue <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></span>
+            </a>
+
+            <a href="/reports/ceo" class="bc" style="grid-area: stale;">
+              <span class="top"><span class="fig" style="color: #fbbf24;">9</span><span class="chip" style="background: rgba(245,158,11,.14); color: #fbbf24;">Warn</span></span>
+              <span><span class="cl">Stale applications</span><span class="go" style="margin-top: 6px;">Open queue <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></span>
+            </a>
+
+            <a href="/clients" class="bc" style="grid-area: lic; flex-direction: row; align-items: center; justify-content: flex-start; gap: 18px;">
+              <span class="tile" style="border-radius: 50%; background: rgba(245,158,11,.12); color: #fbbf24; border: 1px solid rgba(245,158,11,.3);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg></span>
+              <span style="flex: 1; min-width: 0;"><span class="cl">Licences in 30 days</span><span class="go" style="margin-top: 6px;">Open queue <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></span>
+              <span class="pill" style="font: 800 22px 'Plus Jakarta Sans', sans-serif; color: #fbbf24; padding: 0 22px;">4</span>
+            </a>
+
+            <a href="/ghad-reconciliation" class="bc" style="grid-area: ghad;">
+              <span class="top"><span class="fig" style="color: #fbbf24;">2</span><span class="chip" style="background: rgba(245,158,11,.14); color: #fbbf24;">Warn</span></span>
+              <span><span class="cl">GHAD divergences</span><span class="go" style="margin-top: 6px;">Open queue <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span></span>
+            </a>
+
+            <!-- score composition (tall) -->
+            <div id="composition" class="bc" style="grid-area: comp; justify-content: flex-start;">
+              <span><span class="cl" style="font-size: 18px;">Health score</span><span class="cc">Starts at 100, minus these four rates</span></span>
+              <div>
+                <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px;"><span style="font-weight: 500; color: #e6edf7;">Overdue tasks</span><span style="font-weight: 700; color: #f5f8fc; font-variant-numeric: tabular-nums;">−11.0 <span style="font-weight: 400; color: #8b9ab0;">/ 20</span></span></div>
+                <div style="position: relative; height: 6px; margin-top: 10px; border-radius: 3px; background: #1c2842;"><div style="position: absolute; left: 0; top: 0; bottom: 0; width: 55%; border-radius: 3px; background: #fb7185;"></div><div style="position: absolute; top: 50%; left: 55%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fb7185; border: 3px solid #111a2e;"></div></div>
+                <div style="margin-top: 7px; font-size: 12px; color: #8b9ab0;">11 overdue ÷ 80 open tasks × 80</div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px;"><span style="font-weight: 500; color: #e6edf7;">Query response</span><span style="font-weight: 700; color: #f5f8fc; font-variant-numeric: tabular-nums;">−8.3 <span style="font-weight: 400; color: #8b9ab0;">/ 20</span></span></div>
+                <div style="position: relative; height: 6px; margin-top: 10px; border-radius: 3px; background: #1c2842;"><div style="position: absolute; left: 0; top: 0; bottom: 0; width: 42%; border-radius: 3px; background: #fbbf24;"></div><div style="position: absolute; top: 50%; left: 42%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fbbf24; border: 3px solid #111a2e;"></div></div>
+                <div style="margin-top: 7px; font-size: 12px; color: #8b9ab0;">35 ÷ 210 open cases × 50</div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px;"><span style="font-weight: 500; color: #e6edf7;">Stale applications</span><span style="font-weight: 700; color: #f5f8fc; font-variant-numeric: tabular-nums;">−1.7 <span style="font-weight: 400; color: #8b9ab0;">/ 15</span></span></div>
+                <div style="position: relative; height: 6px; margin-top: 10px; border-radius: 3px; background: #1c2842;"><div style="position: absolute; left: 0; top: 0; bottom: 0; width: 11%; border-radius: 3px; background: #fbbf24;"></div><div style="position: absolute; top: 50%; left: 11%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fbbf24; border: 3px solid #111a2e;"></div></div>
+                <div style="margin-top: 7px; font-size: 12px; color: #8b9ab0;">9 ÷ 210 open cases × 40</div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px;"><span style="font-weight: 500; color: #e6edf7;">GHAD divergences</span><span style="font-weight: 700; color: #f5f8fc; font-variant-numeric: tabular-nums;">−2.0 <span style="font-weight: 400; color: #8b9ab0;">/ 8</span></span></div>
+                <div style="position: relative; height: 6px; margin-top: 10px; border-radius: 3px; background: #1c2842;"><div style="position: absolute; left: 0; top: 0; bottom: 0; width: 25%; border-radius: 3px; background: #fbbf24;"></div><div style="position: absolute; top: 50%; left: 25%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fbbf24; border: 3px solid #111a2e;"></div></div>
+                <div style="margin-top: 7px; font-size: 12px; color: #8b9ab0;">2 divergences</div>
+              </div>
+              <span class="inner" style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; font-size: 13px;"><span style="color: #94a3b8;">100 − 23</span><span style="font: 800 20px 'Plus Jakarta Sans', sans-serif; color: #fbbf24;">77</span></span>
+            </div>
+          </section>
+        </div>
+
+        <!-- ════ 4 · BRIEFS + REPORTS ════ -->
+        <section class="bento b4" aria-label="Active briefs and reports">
+
+          <div class="bc" style="grid-area: briefs; justify-content: flex-start;">
+            <span class="top">
+              <span><span class="cl" style="font-size: 20px;">Active briefs</span><span class="cc">Grouped by the country each brief belongs to</span></span>
+              <a href="/projects" style="font-size: 13px; font-weight: 600; min-height: 44px; display: inline-flex; align-items: center; white-space: nowrap;">All projects</a>
+            </span>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <span style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #8b9ab0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Syria</span>
+              <a href="/projects/dcc-introduction" class="inner" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; color: #e6edf7;">
+                <span class="tile" style="width: 40px; height: 40px; border-radius: 12px; background: rgba(34,211,238,.12); color: #67e8f9;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg></span>
+                <span style="flex: 1; min-width: 0;"><span style="display: block; font-size: 14px; font-weight: 600; color: #f5f8fc;">Damascus Certification Center</span><span style="display: block; margin-top: 2px; font-size: 12.5px; color: #94a3b8;">Ministry of Health · DCC</span></span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7cb4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+              </a>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <span style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #8b9ab0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>KSA</span>
+              <a href="/projects/moh-violations" class="inner" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; color: #e6edf7;">
+                <span class="tile" style="width: 40px; height: 40px; border-radius: 12px; background: rgba(34,211,238,.12); color: #67e8f9;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg></span>
+                <span style="flex: 1; min-width: 0;"><span style="display: block; font-size: 14px; font-weight: 600; color: #f5f8fc;">Directorate of Violations</span><span style="display: block; margin-top: 2px; font-size: 12.5px; color: #94a3b8;">Ministry of Health · Al Bidayah</span></span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7cb4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+              </a>
+              <a href="/projects/moh-inspection" class="inner" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; color: #e6edf7;">
+                <span class="tile" style="width: 40px; height: 40px; border-radius: 12px; background: rgba(34,211,238,.12); color: #67e8f9;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg></span>
+                <span style="flex: 1; min-width: 0;"><span style="display: block; font-size: 14px; font-weight: 600; color: #f5f8fc;">Directorate of Inspection</span><span style="display: block; margin-top: 2px; font-size: 12.5px; color: #94a3b8;">Ministry of Health · Al Bidayah</span></span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7cb4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+              </a>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <span style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #8b9ab0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Middle East</span>
+              <a href="/projects/manara-raps" class="inner" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; color: #e6edf7;">
+                <span class="tile" style="width: 40px; height: 40px; border-radius: 12px; background: rgba(34,211,238,.12); color: #67e8f9;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg></span>
+                <span style="flex: 1; min-width: 0;"><span style="display: block; font-size: 14px; font-weight: 600; color: #f5f8fc;">Manara</span><span style="display: block; margin-top: 2px; font-size: 12.5px; color: #94a3b8;">MRG · RAPS</span></span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7cb4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="bc" style="grid-area: rhead; flex-direction: row; align-items: center; justify-content: flex-start; gap: 16px;">
+            <span class="tile" style="border-radius: 50%; background: #0c1427; border: 1px solid #1c2842; color: #60a5fa;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></span>
+            <span><span class="cl" style="font-size: 18px;">Reports &amp; deep dives</span><span class="cc">Status mix, exceptions, and the live queue live in these views</span></span>
+          </div>
+
+          <a href="/reports/ceo" class="bc" style="grid-area: r1;">
+            <span class="top"><span class="tile" style="background: rgba(34,211,238,.14); color: #22d3ee;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+            <span><span class="cl">CEO monitoring</span><span class="cc">Queries and exceptions</span></span>
+          </a>
+          <a href="/reports/monthly" class="bc" style="grid-area: r2;">
+            <span class="top"><span class="tile" style="background: rgba(52,211,153,.14); color: #34d399;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+            <span><span class="cl">Monthly snapshot</span><span class="cc">Throughput and closures</span></span>
+          </a>
+          <a href="/cases?scope=organisation" class="bc" style="grid-area: r3;">
+            <span class="top"><span class="tile" style="background: rgba(129,140,248,.16); color: #818cf8;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.930 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/><path d="M8 10v4"/><path d="M12 10v2"/><path d="M16 10v6"/></svg></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+            <span><span class="cl">Case queue</span><span class="cc">Cases across all clients</span></span>
+          </a>
+          <a href="/clients?scope=organisation" class="bc" style="grid-area: r4;">
+            <span class="top"><span class="tile" style="background: rgba(251,191,36,.14); color: #fbbf24;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+            <span><span class="cl">Client directory</span><span class="cc">All relationships</span></span>
+          </a>
+        </section>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+(function () {
+  // Prototype data from the screen inventory (per-division splits are illustrative).
+  var DIVS = {
+    all:             { name: 'All divisions',   c: '#67e8f9', dep: '' },
+    medical_devices: { name: 'Medical Devices', c: '#22d3ee', dep: 'medical_devices' },
+    pharma:          { name: 'Pharma',          c: '#fbbf24', dep: 'pharma' },
+    cosmetics:       { name: 'Cosmetics',       c: '#c084fc', dep: 'cosmetics' }
+  };
+  var PIPE = { all: [115, 60, 35, 90], medical_devices: [64, 36, 20, 48], pharma: [38, 18, 14, 30], cosmetics: [13, 6, 1, 12] };
+  var TABS = ['open', 'submitted', 'query_response', 'closed'];
+
+  function colours(arr) { return ['#22d3ee', '#60a5fa', arr[2] > 0 ? '#fbbf24' : '#22d3ee', '#34d399']; }
+
+  function render(key) {
+    var d = DIVS[key], arr = PIPE[key], total = arr.reduce(function (a, b) { return a + b; }, 0), col = colours(arr);
+
+    document.querySelectorAll('.tab').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.div === key)); });
+
+    var chip = document.getElementById('divChip');
+    chip.style.background = d.c + '1f';
+    chip.style.color = d.c;
+    document.getElementById('divChipLabel').textContent = d.name;
+    document.getElementById('pipeTotal').textContent = total;
+
+    document.querySelectorAll('.seg').forEach(function (s) {
+      var i = +s.dataset.seg;
+      s.style.flexGrow = Math.max(arr[i], 0.01);
+      s.style.background = col[i];
+    });
+
+    document.querySelectorAll('.stage').forEach(function (el) {
+      var i = +el.dataset.stage, n = arr[i], share = total ? Math.round(n / total * 100) : 0;
+      el.querySelector('.cnt').textContent = n;
+      el.querySelector('.pct2').textContent = share;
+      var m = el.querySelector('.meter'); m.style.width = share + '%'; m.style.background = col[i];
+      el.style.setProperty('--go', col[i]);
+      el.setAttribute('href', '/cases?tab=' + TABS[i] + '&scope=organisation' + (d.dep ? '&department=' + d.dep : ''));
+    });
+  }
+
+  document.querySelectorAll('.tab').forEach(function (b) {
+    b.addEventListener('click', function () { render(b.dataset.div); });
+  });
+})();
+</script>
+</body>
+</html>
